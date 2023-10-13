@@ -29,6 +29,7 @@ You can edit all images & sounds by yourself only the name must be the same
 
 - You can test the Script without starting EVE Online, Just open the image "localtest" and start the script, set the region to the image and you will see if it works.
 - Important note: Resolution Scaling is also an issue why it not works
+
 ![Window](https://i.imgur.com/e0X2sGM.png)
 
 ![EVE](https://i.imgur.com/08hxzIj.png)
