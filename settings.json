@@ -1,14 +1,14 @@
 {
     "alert_region_1": {
-        "x": "819",
-        "y": "741"
+        "x": "-2383",
+        "y": "914"
     },
     "alert_region_2": {
-        "x": "1283",
-        "y": "1085"
+        "x": "-2236",
+        "y": "1507"
     },
     "detectionscale": {
-        "value": 0.0
+        "value": 43.0
     },
     "drones_interface": {
         "x": "",
