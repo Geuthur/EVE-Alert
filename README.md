@@ -1,6 +1,6 @@
 # Eve Online Alert
 
-This Alert is written in Python
+EVE Alert - Check every 2-3 seconds if the Local has an Enemy or Neutral in System and play a sound if someone is there!
 
 ## Features
 
@@ -12,7 +12,6 @@ This Alert is written in Python
 
 - Call Drones back
 - Warp to Destination
-- Maybe in future - Auto Mining System
 - Maybe in future - Auto Mining System
 
 ## Usage
@@ -29,12 +28,22 @@ You can edit all images & sounds by yourself only the name must be the same
 ## Testing
 
 - You can test the Script without starting EVE Online, Just open the image "localtest" and start the script, set the region to the image and you will see if it works.
+- Important note: Resolution Scaling is also an issue why it not works
 
+![Window](https://i.imgur.com/e0X2sGM.png)
+
+![EVE](https://i.imgur.com/08hxzIj.png)
+  
 ## Showcase
 
-https://github.com/Geuthur/EVE-Alert/assets/761682/208800db-6084-4339-a3d8-c566e9763eea
+https://github.com/Geuthur/EVE-Alert/assets/761682/5baa8b4d-6812-4218-8211-56bdc5be5ced
+
+## Donation
+
+I know it is simple, but if you want to support me here:
+https://www.paypal.com/paypalme/HellRiderZ
 
 ## Terms
-$${\color{red}This \space is \space an \space open-source \space project \space provided \space without \space any \space guarantees. \space Use \space it \space at \space your \space own \space risk.}$$
+$${\color{red}This \ is \ an \ open-source \ project \ provided \ without \ any \ guarantees. \ Use \ it \ at \ your \ own \ risk.}$$
 
-$${\color{red}Please \space ensure \space that \space you \space comply \space with \space EVE \space Online's \space terms \space of \space use \space and \space policies. \space The \space use \space of \space bots \space or \space automation \space may \space violate \space the \space game's \space terms \space of \space service.}$$
+$${\color{red}Please \ ensure \ that \ you \ comply \ with \ EVE \ Online's \ terms \ of \ use \ and \ policies. \ The \ use \ of \ bots \ or \ automation \ may \ violate \ the \ game's \ terms \ of \ service.}$$
