@@ -28,7 +28,8 @@ Enemys:     ![Red](https://i.imgur.com/O0VTT69.png)
 
 ## Showcase
 
-[![Showcase](https://i.imgur.com/O0VTT69.png)](https://youtu.be/BvjkhHYVaak "Showcase")
+https://github.com/Geuthur/EVE-Alert/assets/761682/208800db-6084-4339-a3d8-c566e9763eea
+
 ## Notes
 This is an open-source project provided without any guarantees. Use it at your own risk.
 
