@@ -28,8 +28,9 @@ Enemys:     ![Red](https://i.imgur.com/O0VTT69.png)
 
 ## Showcase
 
-![Showcase](https://streamable.com/xd0wp7)
-
+[![Showcase]
+(https://i.imgur.com/O0VTT69.png)]
+(https://streamable.com/xd0wp7 "Showcase")
 ## Notes
 This is an open-source project provided without any guarantees. Use it at your own risk.
 
