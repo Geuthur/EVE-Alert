@@ -12,6 +12,7 @@ This Alert is written in Python
 
 - Call Drones back
 - Warp to Destination
+- Maybe in future - Auto Mining System
 
 ## Usage
 - Simply launch Alert.exe, and a menu will appear. You can configure all your settings there. Afterward, click on "Start."
@@ -22,14 +23,17 @@ Neutral:    ![Neutral](https://i.imgur.com/SdjoIs6.png)
 
 Enemys:     ![Red](https://i.imgur.com/O0VTT69.png)
 
+You can edit all images & sounds by yourself only the name must be the same
+
 ## Testing
 
 - You can test the Script without starting EVE Online, Just open the image "localtest" and start the script, set the region to the image and you will see if it works.
 
 ## Showcase
 
-[![Showcase](https://i.imgur.com/O0VTT69.png)](https://youtu.be/BvjkhHYVaak "Showcase")
-## Notes
-This is an open-source project provided without any guarantees. Use it at your own risk.
+https://github.com/Geuthur/EVE-Alert/assets/761682/208800db-6084-4339-a3d8-c566e9763eea
 
-Please ensure that you comply with EVE Online's terms of use and policies. The use of bots or automation may violate the game's terms of service.
+## Terms
+$${\color{red}This \space is \space an \space open-source \space project \space provided \space without \space any \space guarantees. \space Use \space it \space at \space your \space own \space risk.}$$
+
+$${\color{red}Please \space ensure \space that \space you \space comply \space with \space EVE \space Online's \space terms \space of \space use \space and \space policies. \space The \space use \space of \space bots \space or \space automation \space may \space violate \space the \space game's \space terms \space of \space service.}$$
