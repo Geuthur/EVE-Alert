@@ -19,7 +19,7 @@ EVE Alert - Check every 2-3 seconds if the Local has an Enemy or Neutral in Syst
 - If the Alert doesn't respond to the local environment, you can reduce the detection accuracy or double-check if you've set the region correctly.
 - If both settings are 100% accurate and your interface is not blurred, make sure that your neutral symbol looks like this:
 
-Neutral:    ![Neutral](https://i.imgur.com/SdjoIs6.png)
+Neutral:    ![Neutral](https://i.imgur.com/SdjoIs6.png) or ![Neutral](https://i.imgur.com/L7hy58Y.png) (more safe that it works)
 
 Enemys:     ![Red](https://i.imgur.com/O0VTT69.png)
 
@@ -40,7 +40,7 @@ https://github.com/Geuthur/EVE-Alert/assets/761682/5baa8b4d-6812-4218-8211-56bdc
 
 ## Donation
 
-I know it is simple, but if you want to support me here:
+I know it is simple Script, but if you want to support me here:
 https://www.paypal.com/paypalme/HellRiderZ
 
 ## Terms
