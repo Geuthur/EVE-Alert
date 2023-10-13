@@ -36,7 +36,7 @@ You can edit all images & sounds by yourself only the name must be the same
   
 ## Showcase
 
-https://github.com/Geuthur/EVE-Alert/assets/761682/a367fe9f-9a46-44f8-9e56-08c120073619
+https://github.com/Geuthur/EVE-Alert/assets/761682/5baa8b4d-6812-4218-8211-56bdc5be5ced
 
 ## Donation
 
