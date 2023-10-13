@@ -1,6 +1,6 @@
 # Eve Online Alert
 
-This Alert is written in Python
+EVE Alert - Check every 2-3 seconds if the Local has an Enemy or Neutral in System and play a sound if someone is there!
 
 ## Features
 
@@ -35,6 +35,6 @@ You can edit all images & sounds by yourself only the name must be the same
 https://github.com/Geuthur/EVE-Alert/assets/761682/208800db-6084-4339-a3d8-c566e9763eea
 
 ## Terms
-$${\color{red}This \space is \space an \space open-source \space project \space provided \space without \space any \space guarantees. \space Use \space it \space at \space your \space own \space risk.}$$
+$${\color{red}This \ is \ an \ open-source \ project \ provided \ without \ any \ guarantees. \ Use \ it \ at \ your \ own \ risk.}$$
 
-$${\color{red}Please \space ensure \space that \space you \space comply \space with \space EVE \space Online's \space terms \space of \space use \space and \space policies. \space The \space use \space of \space bots \space or \space automation \space may \space violate \space the \space game's \space terms \space of \space service.}$$
+$${\color{red}Please \ ensure \ that \ you \ comply \ with \ EVE \ Online's \ terms \ of \ use \ and \ policies. \ The \ use \ of \ bots \ or \ automation \ may \ violate \ the \ game's \ terms \ of \ service.}$$
