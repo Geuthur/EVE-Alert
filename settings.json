@@ -1,0 +1,21 @@
+{
+    "alert_region_1": {
+        "x": "819",
+        "y": "741"
+    },
+    "alert_region_2": {
+        "x": "1283",
+        "y": "1085"
+    },
+    "detectionscale": {
+        "value": 0.0
+    },
+    "drones_interface": {
+        "x": "",
+        "y": ""
+    },
+    "warp_button": {
+        "x": "",
+        "y": ""
+    }
+}
