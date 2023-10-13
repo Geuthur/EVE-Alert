@@ -40,7 +40,7 @@ https://github.com/Geuthur/EVE-Alert/assets/761682/5baa8b4d-6812-4218-8211-56bdc
 
 ## Donation
 
-I know it is simple, but if you want to support me here:
+I know it is simple Script, but if you want to support me here:
 https://www.paypal.com/paypalme/HellRiderZ
 
 ## Terms
