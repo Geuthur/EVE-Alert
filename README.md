@@ -13,7 +13,6 @@ EVE Alert - Check every 2-3 seconds if the Local has an Enemy or Neutral in Syst
 - Call Drones back
 - Warp to Destination
 - Maybe in future - Auto Mining System
-- Maybe in future - Auto Mining System
 
 ## Usage
 - Simply launch Alert.exe, and a menu will appear. You can configure all your settings there. Afterward, click on "Start."
