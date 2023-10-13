@@ -26,6 +26,10 @@ Enemys:     ![Red](https://i.imgur.com/O0VTT69.png)
 
 - You can test the Script without starting EVE Online, Just open the image "localtest" and start the script, set the region to the image and you will see if it works.
 
+## Showcase
+
+![Showcase](https://streamable.com/xd0wp7)
+
 ## Notes
 This is an open-source project provided without any guarantees. Use it at your own risk.
 
