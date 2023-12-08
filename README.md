@@ -31,6 +31,7 @@ EVE Alert - Check every 2-3 seconds if the Local has an Enemy or Neutral in Syst
 - Enemys:     ![Red](https://i.imgur.com/O0VTT69.png)
 
 - The Color Mode alert react to all RED Colors
+- You Symbols must look like the upove icons to work.
 
 ## Testing
 - Important note: Resolution Scaling is also an issue why it not works
