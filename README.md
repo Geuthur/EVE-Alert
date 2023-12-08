@@ -25,8 +25,10 @@ Neutral:    ![Neutral](https://i.imgur.com/SdjoIs6.png) or ![Neutral](https://i.
 Enemys:     ![Red](https://i.imgur.com/O0VTT69.png)
 
 You can edit all images & sounds by yourself only the name must be the same
+
 Color Detection:
-![Neutral](https://i.imgur.com/L7hy58Y.png)
+
+Neutral: ![Neutral](https://i.imgur.com/L7hy58Y.png)
 Enemys:     ![Red](https://i.imgur.com/O0VTT69.png)
 
 The Color Mode alert react to all RED Colors
