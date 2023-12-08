@@ -19,14 +19,14 @@ EVE Alert - Check every 2-3 seconds if the Local has an Enemy or Neutral in Syst
 - If the Alert doesn't respond to the local chat, you can reduce the detection accuracy or double-check if you've set the region correctly.
 - If both settings are 100% accurate and your interface is not blurred, make sure that your neutral symbol looks like this:
 
-Image Detection:
+## Image Detection:
 Neutral:    ![Neutral](https://i.imgur.com/SdjoIs6.png) or ![Neutral](https://i.imgur.com/L7hy58Y.png) (higher accuracy)
 
 Enemys:     ![Red](https://i.imgur.com/O0VTT69.png)
 
 You can edit all images & sounds by yourself only the name must be the same
 
-Color Detection:
+## Color Detection:
 
 Neutral: ![Neutral](https://i.imgur.com/L7hy58Y.png)
 Enemys:     ![Red](https://i.imgur.com/O0VTT69.png)
