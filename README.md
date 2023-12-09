@@ -7,9 +7,10 @@ EVE Alert - Check every 2-3 seconds if the Local has an Enemy or Neutral in Syst
 - Play Sound on Local Detection
 - Easy-Use Interface
 - Start/Stop System
+- Monitoring Region on Picture Mode in real-time (also possible to stream via Discord for friends)
+- Color Detection Mode - If Picture Mode not working for you simply use the Color Detection Mode (needs more ressources)
 
 ## Planned Features
-
 - Call Drones back
 - Warp to Destination
 - Maybe in future - Auto Mining System
@@ -22,8 +23,18 @@ EVE Alert - Check every 2-3 seconds if the Local has an Enemy or Neutral in Syst
   
 ## Image Detection
 
-- Neutral:    ![Neutral](https://i.imgur.com/SdjoIs6.png) or ![Neutral](https://i.imgur.com/L7hy58Y.png) (higher accuracy)
+- Neutral:    ![Neutral](https://i.imgur.com/SdjoIs6.png)
 - Enemys:     ![Red](https://i.imgur.com/O0VTT69.png)
+
+If you want more, simply add more images to the "img/" folder with naming image_1, image_2, image_3, etc.
+
+## Detection Modes
+![ingame](https://github.com/Geuthur/EVE-Alert/assets/761682/78e24aec-780a-4d70-95c9-60de480dbb75)
+![no detection](https://github.com/Geuthur/EVE-Alert/assets/761682/aa21ac7d-4413-40be-8c16-43d598600820)
+![ingame2](https://github.com/Geuthur/EVE-Alert/assets/761682/fc097678-bb3f-4198-b186-d753c0bf5c11)
+![detection](https://github.com/Geuthur/EVE-Alert/assets/761682/e1b8bc65-f647-4b32-a8b6-690bdc2d5305)
+
+Ingame / No Detection (Vision Window) / Ingame RED Local / Detection (Vision Window)
 
 ## Color Detection
 
@@ -34,7 +45,7 @@ EVE Alert - Check every 2-3 seconds if the Local has an Enemy or Neutral in Syst
 - You Symbols must look like the upove icons to work.
 
 ## Testing
-- Important note: Resolution Scaling is also an issue why it not works
+- Important note: Resolution Scaling can also be a issue
 
 ![Window](https://i.imgur.com/e0X2sGM.png)
 
