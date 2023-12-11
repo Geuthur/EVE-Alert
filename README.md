@@ -1,6 +1,6 @@
 # Eve Online Alert
 
-EVE Alert - Check every 2-3 seconds if the Local has an Enemy or Neutral in System and play a sound if someone is there!
+EVE Alert - Check every 1-3 seconds if the Local has an Enemy or Neutral in System and play a sound if someone is there!
 
 ## Features
 
@@ -9,11 +9,7 @@ EVE Alert - Check every 2-3 seconds if the Local has an Enemy or Neutral in Syst
 - Start/Stop System
 - Monitoring Region on Picture Mode in real-time (also possible to stream via Discord for friends)
 - Color Detection Mode - If Picture Mode not working for you simply use the Color Detection Mode (needs more ressources)
-
-## Planned Features
-- Call Drones back
-- Warp to Destination
-- Maybe in future - Auto Mining System
+- Faction Spawn Detection - Now you can set a Faction Spawn Detection and it will play a sound if a faction is in Site
 
 ## Usage
 - Simply launch Alert.exe, and a menu will appear. You can configure all your settings there. Afterward, click on "Start."
