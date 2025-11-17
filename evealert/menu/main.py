@@ -19,6 +19,7 @@ from evealert.constants import (
 from evealert.manager.alertmanager import AlertAgent
 from evealert.menu.config import ConfigModeMenu
 from evealert.menu.setting import SettingMenu
+from evealert.menu.statistics import StatisticsWindow
 from evealert.settings.helper import ICON, get_resource_path
 from evealert.settings.logger import logging
 from evealert.tools.overlay import OverlaySystem
@@ -71,8 +72,15 @@ class MainMenuButtons:
             command=self.settings_mode_toggle,
         )
 
+        self.statistics_button = customtkinter.CTkButton(
+            self.settings_label_frame,
+            text="Statistics",
+            command=self.open_statistics,
+        )
+
         self.config_mode_menu.grid(row=0, column=1, padx=(0, 10))
         self.setting_menu.grid(row=0, column=2, padx=(0, 10))
+        self.statistics_button.grid(row=0, column=3, padx=(0, 10))
 
         # Create Buttons
         self.show_alert_button = customtkinter.CTkButton(
@@ -114,6 +122,16 @@ class MainMenuButtons:
             log_menu.exception("Setting Menu Error: %s", e)
             self.main.write_message(
                 "Setting Menu: Error read logs for more information.", "red"
+            )
+
+    def open_statistics(self) -> None:
+        """Open the statistics window."""
+        try:
+            StatisticsWindow(self.main)
+        except Exception as e:
+            log_menu.exception("Statistics Window Error: %s", e)
+            self.main.write_message(
+                "Statistics: Error read logs for more information.", "red"
             )
 
 

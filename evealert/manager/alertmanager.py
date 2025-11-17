@@ -27,6 +27,7 @@ from evealert.constants import (
 from evealert.exceptions import AudioError, ConfigurationError
 from evealert.settings.helper import get_resource_path
 from evealert.settings.validator import ConfigValidator
+from evealert.statistics import AlarmStatistics
 from evealert.tools.vision import Vision
 from evealert.tools.windowscapture import WindowCapture
 
@@ -92,6 +93,7 @@ class AlertAgent:
         self.cooldowntimer = DEFAULT_COOLDOWN_TIMER
         self.alarm_detected = False
         self.mute = False
+        self.volume = 1.0  # Default volume: 100% (0.0 to 1.0)
 
         # Webhook Settings
         self.webhook_cooldown_timer = 0
@@ -102,6 +104,9 @@ class AlertAgent:
         self.alarm_trigger_counts = {}
         self.max_sound_triggers = MAX_SOUND_TRIGGERS
         self.currently_playing_sounds = {}
+
+        # Statistics
+        self.statistics = AlarmStatistics()
 
         self.load_settings()
         self._validate_audio_files()
@@ -140,6 +145,14 @@ class AlertAgent:
     @property
     def is_faction(self) -> bool:
         return self.faction
+
+    def get_statistics(self) -> AlarmStatistics:
+        """Get alarm statistics tracker.
+        
+        Returns:
+            AlarmStatistics instance with current statistics
+        """
+        return self.statistics
 
     def clean_up(self) -> None:
         self.stop()
@@ -197,6 +210,7 @@ class AlertAgent:
             self.detection = int(settings["detectionscale"]["value"])
             self.detection_faction = int(settings["faction_scale"]["value"])
             self.cooldowntimer = int(settings["cooldown_timer"]["value"])
+            self.volume = settings.get("volume", {}).get("value", 100) / 100.0  # Convert to 0.0-1.0
             self.mute = settings["server"]["mute"]
             if self.main.menu.setting.is_changed:
                 vision_opened = False
@@ -295,6 +309,8 @@ class AlertAgent:
             f"{alarm_text}",
             "red",
         )
+        # Track alarm in statistics
+        self.statistics.add_alarm(alarm_type)
         await self.play_sound(sound, alarm_type)
         await self.send_webhook_message(alarm_type)
 
@@ -363,8 +379,11 @@ class AlertAgent:
                     # (N, 1) -> (N, AUDIO_CHANNELS)
                     data = np.repeat(data, AUDIO_CHANNELS, axis=1)
 
+                # Apply volume
+                data_with_volume = (data * self.volume).astype('int16')
+
                 # Play the audio data
-                sd.play(data, samplerate)
+                sd.play(data_with_volume, samplerate)
                 await asyncio.sleep(
                     len(data) / samplerate
                 )  # Wait for the sound to finish
