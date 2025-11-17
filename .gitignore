@@ -11,3 +11,13 @@ build/
 dist/
 main.spec
 testing/
+
+# Test coverage
+htmlcov/
+.coverage
+coverage.xml
+.pytest_cache/
+
+# Test fixtures
+tests/fixtures/*.png
+tests/fixtures/*.wav

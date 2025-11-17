@@ -1,0 +1,52 @@
+name: Build
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller
+    
+    - name: Build with PyInstaller
+      run: |
+        python -m PyInstaller --noconfirm --onefile --windowed --icon "evealert/img/logo.ico" --name "EVE-Alert" --add-data "evealert/img;evealert/img/" --add-data "evealert/sound;evealert/sound/" --add-data "evealert/docs;evealert/docs/" --hidden-import "customtkinter" main.py
+    
+    - name: Create Release Archive
+      run: |
+        Compress-Archive -Path dist/EVE-Alert.exe -DestinationPath EVE-Alert-${{ github.ref_name }}.zip
+    
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: EVE-Alert-${{ github.ref_name }}
+        path: EVE-Alert-${{ github.ref_name }}.zip
+        retention-days: 30
+    
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: EVE-Alert-${{ github.ref_name }}.zip
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
