@@ -52,9 +52,22 @@ logger = logging.getLogger("alert")
 
 
 class AlertAgent:
-    """Alert Agent Class"""
+    """Alert Agent for EVE Online local chat monitoring.
+    
+    This class manages the complete alert system including:
+    - Screenshot capture and analysis
+    - Enemy and faction detection via template matching
+    - Audio alerts with cooldown management
+    - Discord webhook notifications
+    - Vision debug windows
+    """
 
     def __init__(self, main: "MainMenu"):
+        """Initialize the Alert Agent.
+        
+        Args:
+            main: Reference to the MainMenu instance
+        """
         self.main = main
         self.loop = asyncio.get_event_loop()
         self.wincap = WindowCapture(self.main)
@@ -65,12 +78,12 @@ class AlertAgent:
         self.running = False
         self.check = False
 
-        # Locks to prevent overstacking
+        # Main lock for alarm processing - prevents multiple simultaneous alarm checks
         self.lock = asyncio.Lock()
-        self.visionlock = asyncio.Lock()
-        self.factionlock = asyncio.Lock()
+        # Note: Vision threads don't need separate locks as they only write to
+        # self.enemy and self.faction flags, which are atomic operations in Python
 
-        # Vison Settings
+        # Vision Settings
         self.enemy = False
         self.faction = False
 
@@ -213,7 +226,8 @@ class AlertAgent:
             )
             self.main.update_faction_button()
 
-    async def vision_check(self):
+    async def vision_check(self) -> None:
+        """Validate that screenshot capture works for configured alert region."""
         self.load_settings()
         screenshot, _ = self.wincap.get_screenshot_value(
             self.y1, self.x1, self.x2, self.y2
@@ -224,44 +238,44 @@ class AlertAgent:
             self.main.write_message("Wrong Alert Settings.", "red")
             self.check = False
 
-    async def vision_thread(self):
-        async with self.visionlock:
-            while True:
-                screenshot, _ = self.wincap.get_screenshot_value(
-                    self.y1, self.x1, self.x2, self.y2
-                )
-                if screenshot is not None:
-                    enemy = self.alert_vision.find(screenshot, self.detection)
-                    if enemy == "Error":
-                        self.clean_up()
-                    if enemy:
-                        self.enemy = True
-                    else:
-                        self.enemy = False
-                else:
-                    self.main.write_message("Wrong Alert Settings.", "red")
+    async def vision_thread(self) -> None:
+        """Continuously check for enemy detection in the alert region."""
+        while True:
+            screenshot, _ = self.wincap.get_screenshot_value(
+                self.y1, self.x1, self.x2, self.y2
+            )
+            if screenshot is not None:
+                enemy = self.alert_vision.find(screenshot, self.detection)
+                if enemy == "Error":
                     self.clean_up()
-                await asyncio.sleep(VISION_SLEEP_INTERVAL)
+                if enemy:
+                    self.enemy = True
+                else:
+                    self.enemy = False
+            else:
+                self.main.write_message("Wrong Alert Settings.", "red")
+                self.clean_up()
+            await asyncio.sleep(VISION_SLEEP_INTERVAL)
 
-    async def vision_faction_thread(self):
-        async with self.factionlock:
-            self.faction_state = True
-            while True:
-                screenshot_faction, _ = self.wincap.get_screenshot_value(
-                    self.y1_faction, self.x1_faction, self.x2_faction, self.y2_faction
+    async def vision_faction_thread(self) -> None:
+        """Continuously check for faction detection in the faction region."""
+        while True:
+            screenshot_faction, _ = self.wincap.get_screenshot_value(
+                self.y1_faction, self.x1_faction, self.x2_faction, self.y2_faction
+            )
+            if screenshot_faction is not None:
+                faction = self.alert_vision_faction.find_faction(
+                    screenshot_faction, self.detection_faction
                 )
-                if screenshot_faction is not None:
-                    faction = self.alert_vision_faction.find_faction(
-                        screenshot_faction, self.detection_faction
-                    )
 
-                    if faction:
-                        self.faction = True
-                    else:
-                        self.faction = False
-                await asyncio.sleep(VISION_SLEEP_INTERVAL)
+                if faction:
+                    self.faction = True
+                else:
+                    self.faction = False
+            await asyncio.sleep(VISION_SLEEP_INTERVAL)
 
-    async def reset_alarm(self, alarm_type):
+    async def reset_alarm(self, alarm_type: str) -> None:
+        """Reset alarm counters and cooldown for the given alarm type."""
         if alarm_type in self.alarm_trigger_counts:
             self.alarm_trigger_counts[alarm_type] = 0
             self.cooldown_timers[alarm_type] = 0
@@ -273,7 +287,10 @@ class AlertAgent:
                 )
             self.webhook_sent = False
 
-    async def alarm_detection(self, alarm_text, sound=ALARM_SOUND, alarm_type="Enemy"):
+    async def alarm_detection(
+        self, alarm_text: str, sound: str = ALARM_SOUND, alarm_type: str = "Enemy"
+    ) -> None:
+        """Trigger an alarm with text message, sound, and webhook notification."""
         self.main.write_message(
             f"{alarm_text}",
             "red",
@@ -281,7 +298,8 @@ class AlertAgent:
         await self.play_sound(sound, alarm_type)
         await self.send_webhook_message(alarm_type)
 
-    async def send_webhook_message(self, alarm_type):
+    async def send_webhook_message(self, alarm_type: str) -> None:
+        """Send webhook notification for enemy alarms with cooldown."""
         current_time = time.time()
         # Ensure to limit the webhook sending to once per WEBHOOK_COOLDOWN
         if current_time < self.webhook_cooldown_timer:
@@ -299,7 +317,8 @@ class AlertAgent:
             except Exception as e:
                 logger.error("Error sending webhook: %s", e)
 
-    async def play_sound(self, sound, alarm_type):
+    async def play_sound(self, sound: str, alarm_type: str) -> None:
+        """Play alarm sound with trigger limits and cooldown management."""
         if self.mute:
             return
 
@@ -333,18 +352,18 @@ class AlertAgent:
         if alarm_type not in self.currently_playing_sounds:
             self.currently_playing_sounds[alarm_type] = True
             try:
-                # Lese die Audiodaten mit soundfile
+                # Read audio data with soundfile
                 data, samplerate = sf.read(sound, dtype="int16")
 
-                # Prüfe die Form der Daten und passe ggf. die Kanäle an
+                # Check data shape and adjust channels if necessary
                 if data.ndim == 1:
-                    # Mono -> Stereo konvertieren
+                    # Convert Mono -> Stereo
                     data = np.stack([data, data], axis=-1)
                 elif data.ndim == 2 and data.shape[1] == 1:
                     # (N, 1) -> (N, AUDIO_CHANNELS)
                     data = np.repeat(data, AUDIO_CHANNELS, axis=1)
 
-                # Spiele die Audiodaten ab
+                # Play the audio data
                 sd.play(data, samplerate)
                 await asyncio.sleep(
                     len(data) / samplerate
@@ -358,16 +377,16 @@ class AlertAgent:
             finally:
                 self.currently_playing_sounds.pop(alarm_type, None)
 
-    # Run Alert Agent
-    async def run(self):
+    async def run(self) -> None:
+        """Main alert checking loop."""
         async with self.lock:
             while True:
-                # Reload Settings if changed
+                # Reload settings if changed
                 if self.main.menu.setting.is_changed:
                     self.load_settings()
                     self.main.menu.setting.changed = False
 
-                # Reset Alarm Status
+                # Reset alarm status
                 self.alarm_detected = False
 
                 try:
@@ -387,7 +406,7 @@ class AlertAgent:
                     self.main.write_message("Something went wrong.", "red")
                     return
 
-                # Überprüfen, ob eines der Bilder erkannt wurde
+                # Check if any of the images was detected
                 if not self.faction:
                     await self.reset_alarm("Faction")
                 if not self.enemy:

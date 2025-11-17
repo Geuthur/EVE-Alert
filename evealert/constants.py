@@ -35,6 +35,10 @@ FACTION_IMAGE_PREFIX = "faction_"
 
 # Logging
 LOG_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
+LOG_FORMAT_STRING = "%(asctime)s [%(levelname)-8s] %(name)-12s %(funcName)-20s:%(lineno)-4d - %(message)s"
+LOG_MAX_BYTES = 5 * 1024 * 1024  # 5 MB per log file
+LOG_BACKUP_COUNT = 3  # Keep 3 backup files
+LOG_DEFAULT_LEVEL = "INFO"
 
 # OpenCV
 CV_RECTANGLE_THICKNESS = 2

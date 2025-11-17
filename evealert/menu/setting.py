@@ -80,14 +80,14 @@ class SettingMenu:
         for key, value in defaults.items():
             if key in settings:
                 if isinstance(value, dict) and isinstance(settings[key], dict):
-                    # Rekursiv verschachtelte Dictionaries zusammenführen
+                    # Recursively merge nested dictionaries
                     merged_settings[key] = self.merge_settings_with_defaults(
                         settings[key], value
                     )
                 else:
                     merged_settings[key] = settings[key]
             else:
-                # Fehlende Schlüssel mit Standardwerten ergänzen
+                # Fill missing keys with default values
                 merged_settings[key] = value
 
         return merged_settings
@@ -234,7 +234,7 @@ class SettingMenu:
     def create_menu(self):
         """Load the settings from the settings file."""
 
-        # Verwende ein eigenes Frame für das Menü
+        # Use a separate frame for the menu
         self.menu_frame = customtkinter.CTkFrame(self.setting_window)
         self.menu_frame.pack(side="left", padx=20, pady=20)
 
@@ -414,7 +414,7 @@ class SettingMenu:
                 fg_color="#fa0202", hover_color="#bd291e"
             )
 
-            # Position des Beschreibungsfensters rechts neben dem Hauptmenü
+            # Position the description window to the right of the main menu
             config_menu_x, config_menu_y = (
                 self.main.winfo_x(),
                 self.main.winfo_y(),
