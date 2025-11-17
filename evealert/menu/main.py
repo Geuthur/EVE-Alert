@@ -10,6 +10,12 @@ from pynput import keyboard
 from screeninfo import get_monitors
 
 from evealert import __version__
+from evealert.constants import (
+    STATUS_CHECK_INTERVAL,
+    UI_UPDATE_INTERVAL,
+    WINDOW_HEIGHT,
+    WINDOW_WIDTH,
+)
 from evealert.manager.alertmanager import AlertAgent
 from evealert.menu.config import ConfigModeMenu
 from evealert.menu.setting import SettingMenu
@@ -25,9 +31,6 @@ log_test = logging.getLogger("test")
 
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("dark-blue")
-
-WINDOW_WIDTH = 500
-WINDOW_HEIGHT = 350
 
 
 class MainMenuButtons:
@@ -247,7 +250,7 @@ class MainMenu(customtkinter.CTk):
         """Update the mouse position label."""
         x, y = pyautogui.position()
         self.mouse_position_label.configure(text=f"Mausposition: X={x}, Y={y}")
-        self.after(100, self.update_mouse_position_label)
+        self.after(UI_UPDATE_INTERVAL, self.update_mouse_position_label)
 
     def start_overlay(self):
         """Generate the overlay."""
@@ -278,8 +281,8 @@ class MainMenu(customtkinter.CTk):
 
             self.current_status = self.alert.is_running
 
-        # Check the status again after (1 seconds)
-        self.mainmenu_buttons.show_status_label.after(1000, self.check_status)
+        # Check the status again after STATUS_CHECK_INTERVAL
+        self.mainmenu_buttons.show_status_label.after(STATUS_CHECK_INTERVAL, self.check_status)
 
     def update_alert_button(self):
         if self.alert.alert_vision.is_vision_open and self.alert.is_running:

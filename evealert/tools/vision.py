@@ -4,6 +4,15 @@ from datetime import datetime
 import cv2 as cv
 import numpy as np
 
+from evealert.constants import (
+    CV_DETECTION_COLOR,
+    CV_LINE_TYPE,
+    CV_RECTANGLE_THICKNESS,
+    DETECTION_THRESHOLD_MAX,
+    DETECTION_THRESHOLD_MIN,
+    GROUP_RECTANGLES_EPS,
+    GROUP_RECTANGLES_THRESHOLD,
+)
 from evealert.exceptions import RegionSizeError, ScreenshotError
 
 logger = logging.getLogger("tools")
@@ -45,7 +54,7 @@ class Vision:
 
     def vision_process(self, haystack_img, threshold=0.5, vision_mode="Enemy"):
         all_points = []
-        color = (0, 255, 0)
+        color = CV_DETECTION_COLOR
 
         for idx, (needle_img, needle_dim) in enumerate(
             zip(self.needle_imgs, self.needle_dims)
@@ -88,7 +97,7 @@ class Vision:
                     haystack_img_norm, needle_img_norm, self.method
                 )
                 detection_treshhold = max(
-                    min(threshold / 100, 1.0), 0.1
+                    min(threshold / 100, DETECTION_THRESHOLD_MAX), DETECTION_THRESHOLD_MIN
                 )  # Ensures value between 0.1 and 1.0
 
             except Exception as e:
@@ -111,7 +120,9 @@ class Vision:
                 rectangles.append(rect)
 
             # Apply group rectangles.
-            rectangles, _ = cv.groupRectangles(rectangles, groupThreshold=1, eps=0.5)
+            rectangles, _ = cv.groupRectangles(
+                rectangles, groupThreshold=GROUP_RECTANGLES_THRESHOLD, eps=GROUP_RECTANGLES_EPS
+            )
 
             points = []
             if len(rectangles):
@@ -135,8 +146,8 @@ class Vision:
                                 top_left,
                                 bottom_right,
                                 color=color,
-                                lineType=cv.LINE_4,
-                                thickness=2,
+                                lineType=CV_LINE_TYPE,
+                                thickness=CV_RECTANGLE_THICKNESS,
                             )
                         except Exception as e:
                             logger.error("Rectangle Error: %s", e)

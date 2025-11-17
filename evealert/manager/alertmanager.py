@@ -9,28 +9,43 @@ import numpy as np
 import sounddevice as sd
 import soundfile as sf
 
+from evealert.constants import (
+    ALARM_SOUND_FILE,
+    ALERT_IMAGE_PREFIX,
+    AUDIO_CHANNELS,
+    DEFAULT_COOLDOWN_TIMER,
+    FACTION_IMAGE_PREFIX,
+    FACTION_SOUND_FILE,
+    IMG_FOLDER,
+    MAIN_CHECK_SLEEP_MAX,
+    MAIN_CHECK_SLEEP_MIN,
+    MAX_SOUND_TRIGGERS,
+    SOUND_FOLDER,
+    VISION_SLEEP_INTERVAL,
+    WEBHOOK_COOLDOWN,
+)
+from evealert.exceptions import AudioError, ConfigurationError
 from evealert.settings.helper import get_resource_path
+from evealert.settings.validator import ConfigValidator
 from evealert.tools.vision import Vision
 from evealert.tools.windowscapture import WindowCapture
 
 if TYPE_CHECKING:
     from evealert.menu.main import MainMenu
 
-# Den Dateinamen des Alarmklangs angeben
-IMG_FOLDER = "evealert/img"
-
-ALARM_SOUND = get_resource_path("sound/alarm.wav")
-FACTION_SOUND = get_resource_path("sound/faction.wav")
+# Sound file paths
+ALARM_SOUND = get_resource_path(f"{SOUND_FOLDER}/{ALARM_SOUND_FILE}")
+FACTION_SOUND = get_resource_path(f"{SOUND_FOLDER}/{FACTION_SOUND_FILE}")
 
 ALERT_FILES = [
     os.path.join(IMG_FOLDER, filename)
     for filename in os.listdir(IMG_FOLDER)
-    if filename.startswith("image_")
+    if filename.startswith(ALERT_IMAGE_PREFIX)
 ]
 FACTION_FILES = [
     os.path.join(IMG_FOLDER, filename)
     for filename in os.listdir(IMG_FOLDER)
-    if filename.startswith("faction_")
+    if filename.startswith(FACTION_IMAGE_PREFIX)
 ]
 
 logger = logging.getLogger("alert")
@@ -61,7 +76,7 @@ class AlertAgent:
 
         # Alarm Settings
         self.cooldown_timers = {}
-        self.cooldowntimer = 60
+        self.cooldowntimer = DEFAULT_COOLDOWN_TIMER
         self.alarm_detected = False
         self.mute = False
 
@@ -72,32 +87,52 @@ class AlertAgent:
         # Sound Settings
         self.p = sd
         self.alarm_trigger_counts = {}
-        self.max_sound_triggers = 3
+        self.max_sound_triggers = MAX_SOUND_TRIGGERS
         self.currently_playing_sounds = {}
 
         self.load_settings()
+        self._validate_audio_files()
+
+    def _validate_audio_files(self):
+        """Validate that required audio files exist."""
+        from evealert.settings.validator import ConfigValidator
+
+        valid_alarm, error_alarm = ConfigValidator.validate_audio_file(
+            ALARM_SOUND, "Alarm sound"
+        )
+        valid_faction, error_faction = ConfigValidator.validate_audio_file(
+            FACTION_SOUND, "Faction sound"
+        )
+
+        if not valid_alarm:
+            logger.warning(error_alarm)
+            self.main.write_message(f"Warning: {error_alarm}", "red")
+
+        if not valid_faction:
+            logger.warning(error_faction)
+            self.main.write_message(f"Warning: {error_faction}", "red")
 
     @property
-    def is_running(self):
+    def is_running(self) -> bool:
         return self.running
 
     @property
-    def is_alarm(self):
+    def is_alarm(self) -> bool:
         return self.alarm_detected
 
     @property
-    def is_enemy(self):
+    def is_enemy(self) -> bool:
         return self.enemy
 
     @property
-    def is_faction(self):
+    def is_faction(self) -> bool:
         return self.faction
 
-    def clean_up(self):
+    def clean_up(self) -> None:
         self.stop()
         self.main.write_message("System: EVE Alert stopped.", "green")
 
-    def start(self):
+    def start(self) -> bool:
         self.loop.run_until_complete(self.vision_check())
         if self.check is True:
 
@@ -114,7 +149,7 @@ class AlertAgent:
             return True
         return False
 
-    def stop(self):
+    def stop(self) -> None:
         self.loop.stop()
         self.running = False
         self.currently_playing_sounds = {}
@@ -125,10 +160,19 @@ class AlertAgent:
         self.main.update_alert_button()
         self.main.update_faction_button()
 
-    def load_settings(self):
+    def load_settings(self) -> None:
         settings = self.main.menu.setting.load_settings()
 
         if settings:
+            # Validate settings
+            is_valid, errors = ConfigValidator.validate_settings_dict(settings)
+            if not is_valid:
+                error_msg = "Configuration validation failed:\n" + "\n".join(errors)
+                logger.error(error_msg)
+                self.main.write_message("Settings validation failed. Check logs.", "red")
+                for error in errors:
+                    self.main.write_message(f"  - {error}", "red")
+                return
             self.x1 = int(settings["alert_region_1"]["x"])
             self.y1 = int(settings["alert_region_1"]["y"])
             self.x2 = int(settings["alert_region_2"]["x"])
@@ -157,12 +201,12 @@ class AlertAgent:
                     self.set_vision_faction()
                 self.main.write_message("Settings: Loaded.", "green")
 
-    def set_vision(self):
+    def set_vision(self) -> None:
         if self.is_running:
             self.alert_vision.debug_mode = not self.alert_vision.debug_mode
             self.main.update_alert_button()
 
-    def set_vision_faction(self):
+    def set_vision_faction(self) -> None:
         if self.is_running:
             self.alert_vision_faction.debug_mode_faction = (
                 not self.alert_vision_faction.debug_mode_faction
@@ -197,9 +241,7 @@ class AlertAgent:
                 else:
                     self.main.write_message("Wrong Alert Settings.", "red")
                     self.clean_up()
-                await asyncio.sleep(
-                    0.1
-                )  # Add a small delay to prevent overstacking the CPU
+                await asyncio.sleep(VISION_SLEEP_INTERVAL)
 
     async def vision_faction_thread(self):
         async with self.factionlock:
@@ -217,9 +259,7 @@ class AlertAgent:
                         self.faction = True
                     else:
                         self.faction = False
-                await asyncio.sleep(
-                    0.1
-                )  # Add a small delay to prevent overstacking the CPU
+                await asyncio.sleep(VISION_SLEEP_INTERVAL)
 
     async def reset_alarm(self, alarm_type):
         if alarm_type in self.alarm_trigger_counts:
@@ -243,7 +283,7 @@ class AlertAgent:
 
     async def send_webhook_message(self, alarm_type):
         current_time = time.time()
-        # Ensure to limit the webhook sending to once every 5 seconds
+        # Ensure to limit the webhook sending to once per WEBHOOK_COOLDOWN
         if current_time < self.webhook_cooldown_timer:
             logger.info("Webhook is in cooldown period. Message not sent.")
             return
@@ -253,7 +293,7 @@ class AlertAgent:
             try:
                 msg = f"Enemy Appears in {self.main.menu.setting.system_name.get()}!"
                 self.main.webhook.execute(msg)
-                self.webhook_cooldown_timer = current_time + 5
+                self.webhook_cooldown_timer = current_time + WEBHOOK_COOLDOWN
                 self.webhook_sent = True
 
             except Exception as e:
@@ -301,8 +341,8 @@ class AlertAgent:
                     # Mono -> Stereo konvertieren
                     data = np.stack([data, data], axis=-1)
                 elif data.ndim == 2 and data.shape[1] == 1:
-                    # (N, 1) -> (N, 2)
-                    data = np.repeat(data, 2, axis=1)
+                    # (N, 1) -> (N, AUDIO_CHANNELS)
+                    data = np.repeat(data, AUDIO_CHANNELS, axis=1)
 
                 # Spiele die Audiodaten ab
                 sd.play(data, samplerate)
@@ -353,7 +393,7 @@ class AlertAgent:
                 if not self.enemy:
                     await self.reset_alarm("Enemy")
 
-                sleep_time = random.uniform(2, 3)
+                sleep_time = random.uniform(MAIN_CHECK_SLEEP_MIN, MAIN_CHECK_SLEEP_MAX)
                 self.main.write_message(
                     f"Next check in {sleep_time:.2f} seconds...",
                 )
