@@ -1,26 +1,54 @@
-__pycache__/**
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# User Runtime Data
 settings.json
 client.json
-Paper.exe
-pyinstaller.txt
-testing/*
-*.pyc
 logs/
 
+# Build & Distribution
 build/
 dist/
+*.egg-info/
+*.egg
 main.spec
-testing/
+Paper.exe
 
-# Test coverage
-htmlcov/
+# PyInstaller
+pyinstaller.txt
+
+# Testing
+.pytest_cache/
 .coverage
 coverage.xml
-.pytest_cache/
-
-# Test fixtures
+htmlcov/
+.tox/
 tests/fixtures/*.png
 tests/fixtures/*.wav
+testing/
 
-# Pre-commit cache
+# Pre-commit
 .cache/
+.pre-commit-cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Development Documentation (optional - keep commented out to include in repo)
+# PULL_REQUEST_DESCRIPTION.md
+# PHASE_5_CHECKLIST.md
