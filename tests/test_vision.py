@@ -6,7 +6,7 @@ from pathlib import Path
 import cv2 as cv
 import numpy as np
 
-from evealert.exceptions import RegionSizeError, ScreenshotError
+from evealert.exceptions import RegionSizeError
 from evealert.tools.vision import Vision
 
 
