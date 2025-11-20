@@ -2,7 +2,6 @@
 
 import unittest
 from pathlib import Path
-from unittest.mock import MagicMock, patch
 
 import cv2 as cv
 import numpy as np
