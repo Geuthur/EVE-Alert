@@ -1,6 +1,5 @@
 """Unit tests for AlertManager core functionality."""
 
-import asyncio
 import json
 import tempfile
 import time
