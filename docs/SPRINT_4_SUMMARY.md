@@ -225,7 +225,7 @@ ______________________________________________________________________
 
 ### Statistics Architecture
 
-```python
+```text
 AlarmStatistics
 ├── total_alarms: int          # All-time counter
 ├── session_alarms: int        # Current session counter
