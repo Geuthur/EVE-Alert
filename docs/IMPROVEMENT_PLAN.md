@@ -1,13 +1,15 @@
 # EVE-Alert Verbesserungsplan
 
 ## Projektübersicht
+
 Systematische Verbesserung des EVE-Alert Systems für bessere Performance, Stabilität und Wartbarkeit.
 
----
+______________________________________________________________________
 
 ## Phase 1: Grundlegende Stabilität & Abhängigkeiten ⚡
 
 ### 1.1 Dependencies Synchronisation
+
 **Priorität:** HOCH | **Aufwand:** 1h | **Status:** ✅ Abgeschlossen
 
 - [x] `requirements.txt` und `pyproject.toml` synchronisieren
@@ -20,9 +22,10 @@ Systematische Verbesserung des EVE-Alert Systems für bessere Performance, Stabi
 
 **Erwartetes Ergebnis:** ✅ Konsistente Abhängigkeiten, keine Versionskonflikte
 
----
+______________________________________________________________________
 
 ### 1.2 Fehlerbehandlung & Validierung
+
 **Priorität:** HOCH | **Aufwand:** 3h | **Status:** ✅ Abgeschlossen
 
 - [x] Konfigurationsvalidierung beim Start implementiert
@@ -40,11 +43,12 @@ Systematische Verbesserung des EVE-Alert Systems für bessere Performance, Stabi
 
 **Erwartetes Ergebnis:** ✅ Robustere Anwendung, weniger Abstürze
 
----
+______________________________________________________________________
 
 ## Phase 2: Performance-Optimierung 🚀
 
 ### 2.1 Screenshot-Verarbeitung Optimierung
+
 **Priorität:** MITTEL | **Aufwand:** 2h | **Status:** ✅ Abgeschlossen
 
 - [x] Mehrfache Bildkonvertierungen reduziert
@@ -56,9 +60,10 @@ Systematische Verbesserung des EVE-Alert Systems für bessere Performance, Stabi
 
 **Erwartetes Ergebnis:** ✅ 15-20% schnellere Screenshot-Verarbeitung
 
----
+______________________________________________________________________
 
 ### 2.2 Vision Thread Optimierung
+
 **Priorität:** MITTEL | **Aufwand:** 2h | **Status:** ✅ Teilweise abgeschlossen
 
 - [x] Sleep-Zeiten als Konstanten definiert (VISION_SLEEP_INTERVAL)
@@ -68,9 +73,10 @@ Systematische Verbesserung des EVE-Alert Systems für bessere Performance, Stabi
 
 **Erwartetes Ergebnis:** 🔄 Niedrigere CPU-Last, flüssigere UI (in Arbeit)
 
----
+______________________________________________________________________
 
 ### 2.3 Magische Zahlen eliminieren
+
 **Priorität:** NIEDRIG | **Aufwand:** 1h | **Status:** ✅ Abgeschlossen
 
 - [x] Konstanten-Datei erstellt (`evealert/constants.py`)
@@ -89,11 +95,12 @@ Systematische Verbesserung des EVE-Alert Systems für bessere Performance, Stabi
 
 **Erwartetes Ergebnis:** ✅ Bessere Wartbarkeit, einfache Anpassung
 
----
+______________________________________________________________________
 
 ## Phase 3: Code-Qualität & Wartbarkeit 📝
 
 ### 3.1 Type Hints vervollständigen
+
 **Priorität:** MITTEL | **Aufwand:** 2h | **Status:** ✅ Abgeschlossen
 
 - [x] Type Hints für AlertAgent Properties hinzugefügt
@@ -109,14 +116,15 @@ Systematische Verbesserung des EVE-Alert Systems für bessere Performance, Stabi
 
 **Erwartetes Ergebnis:** ✅ Bessere IDE-Unterstützung, ~90% Type Coverage
 
----
+______________________________________________________________________
 
 ### 3.2 Logging verbessern
+
 **Priorität:** NIEDRIG | **Aufwand:** 1h | **Status:** ✅ Abgeschlossen (Sprint 2)
 
 - [x] Strukturierte Log-Levels konsistent verwenden
   - DEBUG für Vision-Details
-  - INFO für normale Events  
+  - INFO für normale Events
   - WARNING für recoverable Errors
   - ERROR für kritische Fehler
 - [x] Log-Rotation implementiert (5MB, 3 Backups)
@@ -124,9 +132,10 @@ Systematische Verbesserung des EVE-Alert Systems für bessere Performance, Stabi
 
 **Erwartetes Ergebnis:** ✅ Besseres Debugging, Troubleshooting
 
----
+______________________________________________________________________
 
 ### 3.3 Dokumentation vervollständigen
+
 **Priorität:** HOCH | **Aufwand:** 2h | **Status:** ✅ Abgeschlossen
 
 - [x] Alle Kommentare auf Englisch umgestellt
@@ -138,11 +147,12 @@ Systematische Verbesserung des EVE-Alert Systems für bessere Performance, Stabi
 
 **Erwartetes Ergebnis:** ✅ Professionelle Dokumentation, einfaches Onboarding
 
----
+______________________________________________________________________
 
 ## Phase 4: Neue Features & Verbesserungen ✨
 
 ### 4.1 Runtime-Konfiguration
+
 **Priorität:** MITTEL | **Aufwand:** 3h | **Status:** ⏳ Ausstehend
 
 - [ ] Settings während Laufzeit anpassbar machen
@@ -154,9 +164,10 @@ Systematische Verbesserung des EVE-Alert Systems für bessere Performance, Stabi
 
 **Erwartetes Ergebnis:** Bessere Benutzererfahrung
 
----
+______________________________________________________________________
 
 ### 4.2 Multi-Monitor Unterstützung
+
 **Priorität:** NIEDRIG | **Aufwand:** 4h | **Status:** ⏳ Ausstehend
 
 - [ ] Monitor-Auswahl in Settings
@@ -166,9 +177,10 @@ Systematische Verbesserung des EVE-Alert Systems für bessere Performance, Stabi
 
 **Erwartetes Ergebnis:** Flexibilität für Multi-Monitor-Setups
 
----
+______________________________________________________________________
 
 ### 4.3 Statistik & History
+
 **Priorität:** NIEDRIG | **Aufwand:** 3h | **Status:** ⏳ Ausstehend
 
 - [ ] Alarm-Counter (Total, Session)
@@ -178,9 +190,10 @@ Systematische Verbesserung des EVE-Alert Systems für bessere Performance, Stabi
 
 **Erwartetes Ergebnis:** Nutzungsanalyse, Pattern-Erkennung
 
----
+______________________________________________________________________
 
 ### 4.4 Erweiterte Audio-Optionen
+
 **Priorität:** NIEDRIG | **Aufwand:** 2h | **Status:** ⏳ Ausstehend
 
 - [ ] Lautstärke-Regler im UI
@@ -190,11 +203,12 @@ Systematische Verbesserung des EVE-Alert Systems für bessere Performance, Stabi
 
 **Erwartetes Ergebnis:** Personalisierung
 
----
+______________________________________________________________________
 
 ## Phase 5: Testing & CI/CD 🧪
 
 ### 5.1 Unit Tests erstellen
+
 **Priorität:** MITTEL | **Aufwand:** 6h | **Status:** ⏳ Ausstehend
 
 - [ ] Test-Suite für Vision-Modul
@@ -211,9 +225,10 @@ Systematische Verbesserung des EVE-Alert Systems für bessere Performance, Stabi
 
 **Erwartetes Ergebnis:** Stabilere Releases, Regression-Prevention
 
----
+______________________________________________________________________
 
 ### 5.2 Integration Tests
+
 **Priorität:** NIEDRIG | **Aufwand:** 4h | **Status:** ⏳ Ausstehend
 
 - [ ] End-to-End Test mit Mock-Screenshots
@@ -223,9 +238,10 @@ Systematische Verbesserung des EVE-Alert Systems für bessere Performance, Stabi
 
 **Erwartetes Ergebnis:** Vollständige Test-Abdeckung
 
----
+______________________________________________________________________
 
 ### 5.3 GitHub Actions verbessern
+
 **Priorität:** NIEDRIG | **Aufwand:** 2h | **Status:** ⏳ Ausstehend
 
 - [ ] Automatische Tests bei PR
@@ -235,11 +251,12 @@ Systematische Verbesserung des EVE-Alert Systems für bessere Performance, Stabi
 
 **Erwartetes Ergebnis:** Automatisierte Qualitätssicherung
 
----
+______________________________________________________________________
 
 ## Phase 6: Dokumentation 📚
 
 ### 6.1 Code-Dokumentation
+
 **Priorität:** MITTEL | **Aufwand:** 3h | **Status:** ⏳ Ausstehend
 
 - [ ] Docstrings für alle öffentlichen Funktionen/Klassen
@@ -249,9 +266,10 @@ Systematische Verbesserung des EVE-Alert Systems für bessere Performance, Stabi
 
 **Erwartetes Ergebnis:** Bessere Onboarding für Contributors
 
----
+______________________________________________________________________
 
 ### 6.2 Benutzer-Dokumentation
+
 **Priorität:** NIEDRIG | **Aufwand:** 2h | **Status:** ⏳ Ausstehend
 
 - [ ] Setup-Guide erweitern
@@ -262,54 +280,59 @@ Systematische Verbesserung des EVE-Alert Systems für bessere Performance, Stabi
 
 **Erwartetes Ergebnis:** Reduzierte Support-Anfragen
 
----
+______________________________________________________________________
 
 ## Priorisierte Roadmap
 
 ### Sprint 1 (Woche 1-2): Stabilität ⚡
+
 1. Dependencies Synchronisation
-2. Fehlerbehandlung & Validierung
-3. Screenshot-Optimierung
+1. Fehlerbehandlung & Validierung
+1. Screenshot-Optimierung
 
 **Ziel:** Stabile Basis-Version
 
----
+______________________________________________________________________
 
 ### Sprint 2 (Woche 3-4): Performance 🚀
+
 1. Vision Thread Optimierung
-2. Magische Zahlen eliminieren
-3. Type Hints vervollständigen
+1. Magische Zahlen eliminieren
+1. Type Hints vervollständigen
 
 **Ziel:** Optimierte, wartbare Codebasis
 
----
+______________________________________________________________________
 
 ### Sprint 3 (Woche 5-6): Features ✨
+
 1. Runtime-Konfiguration
-2. Logging verbessern
-3. Statistik & History
+1. Logging verbessern
+1. Statistik & History
 
 **Ziel:** Erweiterte Funktionalität
 
----
+______________________________________________________________________
 
 ### Sprint 4 (Woche 7-8): Testing 🧪
+
 1. Unit Tests erstellen
-2. Code-Dokumentation
-3. GitHub Actions verbessern
+1. Code-Dokumentation
+1. GitHub Actions verbessern
 
 **Ziel:** Professionelle Code-Qualität
 
----
+______________________________________________________________________
 
 ### Backlog (Nice to Have) 💡
+
 - Multi-Monitor Unterstützung
 - Internationalisierung
 - Integration Tests
 - Erweiterte Audio-Optionen
 - Benutzer-Dokumentation
 
----
+______________________________________________________________________
 
 ## Erfolgs-Metriken
 
@@ -321,27 +344,30 @@ Systematische Verbesserung des EVE-Alert Systems für bessere Performance, Stabi
 - ✅ 100% konsistente Dependencies
 - ✅ Type-Hint Coverage > 90%
 
----
+______________________________________________________________________
 
 ## Notizen & Entscheidungen
 
 ### Dependencies-Entscheidung
+
 - Verwende `pyproject.toml` als primäre Quelle
 - `requirements.txt` für Backward-Kompatibilität beibehalten
 - Automatische Sync mittels Script
 
 ### Breaking Changes vermeiden
+
 - Alle Änderungen müssen abwärtskompatibel sein
 - Bestehende Config-Dateien müssen weiterfunktionieren
 - Migration-Guide bei größeren Änderungen
 
 ### Code-Style
+
 - Black Formatter (bereits aktiv)
 - isort für Imports
 - pylint/flake8 für Linting
 - Pre-commit Hooks (bereits aktiv)
 
----
+______________________________________________________________________
 
 **Letzte Aktualisierung:** 17. November 2025
 **Verantwortlich:** Development Team
