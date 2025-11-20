@@ -8,11 +8,11 @@ if TYPE_CHECKING:
 
 class ConfigModeMenu:
     """Configuration mode menu for region selection.
-    
+
     Provides a guide window with instructions for selecting alert and faction
     regions using keyboard hotkeys (F1/F2). Manages the visual state of the
     config mode button to indicate when the system is in configuration mode.
-    
+
     Attributes:
         main: Reference to MainMenu instance
         open: Whether the config window is currently open
@@ -23,7 +23,7 @@ class ConfigModeMenu:
 
     def __init__(self, main: "MainMenu") -> None:
         """Initialize the configuration mode menu.
-        
+
         Args:
             main: Reference to the MainMenu instance
         """
@@ -92,7 +92,7 @@ class ConfigModeMenu:
 
     def open_menu(self) -> None:
         """Open or close the configuration mode guide window.
-        
+
         Shows instructions for F1/F2 region selection. Positions the window
         to the right of the main menu. Updates button color to indicate active state.
         """

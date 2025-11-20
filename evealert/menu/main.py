@@ -36,7 +36,7 @@ customtkinter.set_default_color_theme("dark-blue")
 
 class MainMenuButtons:
     """Manages all buttons in the main menu interface.
-    
+
     Handles creation and event handling for:
     - Config Mode button
     - Settings button
@@ -44,10 +44,10 @@ class MainMenuButtons:
     - Faction Region display button
     - Status label
     """
-    
+
     def __init__(self, main: "MainMenu") -> None:
         """Initialize menu buttons.
-        
+
         Args:
             main: Reference to the MainMenu instance
         """
@@ -137,13 +137,13 @@ class MainMenuButtons:
 
 class MenuManager:
     """Manages all menu components (Config and Settings).
-    
+
     Centralizes access to configuration and settings menus.
     """
-    
+
     def __init__(self, main: "MainMenu") -> None:
         """Initialize menu manager with config and settings menus.
-        
+
         Args:
             main: Reference to the MainMenu instance
         """
@@ -154,14 +154,14 @@ class MenuManager:
 
 class MainMenu(customtkinter.CTk):
     """Main application window for EVE Alert System.
-    
+
     This is the central GUI component that manages:
     - Menu buttons and settings interface
     - Alert monitoring system (AlertAgent)
     - Overlay visualization
     - Status updates and logging
     - Keyboard hotkeys (F1/F2 for region selection)
-    
+
     Attributes:
         mainmenu_buttons: Button management component
         menu: Menu system manager (config and settings)
@@ -255,7 +255,7 @@ class MainMenu(customtkinter.CTk):
 
     def init_menu(self) -> None:
         """Initialize and layout the main menu interface.
-        
+
         Sets up:
         - Mouse position tracking
         - Button frames and layout
@@ -293,7 +293,7 @@ class MainMenu(customtkinter.CTk):
 
     def set_icon(self, icon: str) -> None:
         """Set the icon for the main window.
-        
+
         Args:
             icon: Path to the icon file
         """
@@ -310,7 +310,7 @@ class MainMenu(customtkinter.CTk):
 
     def open_error_window(self, message: str) -> None:
         """Open an error dialog window.
-        
+
         Args:
             message: Error message to display
         """
@@ -318,7 +318,7 @@ class MainMenu(customtkinter.CTk):
 
     def write_message(self, text: str, color: str = "normal") -> None:
         """Write a timestamped message to the log field.
-        
+
         Args:
             text: Message text to display
             color: Text color (normal, green, red)
@@ -344,7 +344,7 @@ class MainMenu(customtkinter.CTk):
 
     def get_current_monitor(self):
         """Get the monitor where the mouse cursor is currently located.
-        
+
         Returns:
             Monitor object or None if not found
         """
@@ -359,7 +359,7 @@ class MainMenu(customtkinter.CTk):
 
     def check_status(self) -> None:
         """Check and update the alert system status indicator.
-        
+
         Updates the status icon (online/offline) based on whether
         the alert system is currently running.
         """
@@ -374,7 +374,9 @@ class MainMenu(customtkinter.CTk):
             self.current_status = self.alert.is_running
 
         # Check the status again after STATUS_CHECK_INTERVAL
-        self.mainmenu_buttons.show_status_label.after(STATUS_CHECK_INTERVAL, self.check_status)
+        self.mainmenu_buttons.show_status_label.after(
+            STATUS_CHECK_INTERVAL, self.check_status
+        )
 
     def update_alert_button(self) -> None:
         """Update alert region button color based on vision debug state."""
@@ -413,10 +415,10 @@ class MainMenu(customtkinter.CTk):
     # Keyboard Functions
     def on_key_release(self, key) -> None:
         """Handle keyboard hotkey events for region selection.
-        
+
         Args:
             key: The keyboard key that was released
-            
+
         Hotkeys:
             F1: Activate alert region selection
             F2: Activate faction region selection
@@ -448,7 +450,7 @@ class MainMenu(customtkinter.CTk):
 
     def start_alert_script(self) -> None:
         """Start the alert monitoring system in a background thread.
-        
+
         Creates a new thread to run the alert system without blocking
         the GUI. Handles errors gracefully with user feedback.
         """
@@ -463,7 +465,7 @@ class MainMenu(customtkinter.CTk):
 
     def stop_alert_script(self) -> None:
         """Stop the alert monitoring system.
-        
+
         Gracefully shuts down all alert threads and resets the system state.
         """
         if self.alert.is_running:

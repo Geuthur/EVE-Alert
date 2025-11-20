@@ -24,7 +24,6 @@ from evealert.constants import (
     VISION_SLEEP_INTERVAL,
     WEBHOOK_COOLDOWN,
 )
-from evealert.exceptions import AudioError, ConfigurationError
 from evealert.settings.helper import get_resource_path
 from evealert.settings.validator import ConfigValidator
 from evealert.statistics import AlarmStatistics
@@ -54,7 +53,7 @@ logger = logging.getLogger("alert")
 
 class AlertAgent:
     """Alert Agent for EVE Online local chat monitoring.
-    
+
     This class manages the complete alert system including:
     - Screenshot capture and analysis
     - Enemy and faction detection via template matching
@@ -65,7 +64,7 @@ class AlertAgent:
 
     def __init__(self, main: "MainMenu"):
         """Initialize the Alert Agent.
-        
+
         Args:
             main: Reference to the MainMenu instance
         """
@@ -148,7 +147,7 @@ class AlertAgent:
 
     def get_statistics(self) -> AlarmStatistics:
         """Get alarm statistics tracker.
-        
+
         Returns:
             AlarmStatistics instance with current statistics
         """
@@ -195,7 +194,9 @@ class AlertAgent:
             if not is_valid:
                 error_msg = "Configuration validation failed:\n" + "\n".join(errors)
                 logger.error(error_msg)
-                self.main.write_message("Settings validation failed. Check logs.", "red")
+                self.main.write_message(
+                    "Settings validation failed. Check logs.", "red"
+                )
                 for error in errors:
                     self.main.write_message(f"  - {error}", "red")
                 return
@@ -210,7 +211,9 @@ class AlertAgent:
             self.detection = int(settings["detectionscale"]["value"])
             self.detection_faction = int(settings["faction_scale"]["value"])
             self.cooldowntimer = int(settings["cooldown_timer"]["value"])
-            self.volume = settings.get("volume", {}).get("value", 100) / 100.0  # Convert to 0.0-1.0
+            self.volume = (
+                settings.get("volume", {}).get("value", 100) / 100.0
+            )  # Convert to 0.0-1.0
             self.mute = settings["server"]["mute"]
             if self.main.menu.setting.is_changed:
                 vision_opened = False
@@ -380,7 +383,7 @@ class AlertAgent:
                     data = np.repeat(data, AUDIO_CHANNELS, axis=1)
 
                 # Apply volume
-                data_with_volume = (data * self.volume).astype('int16')
+                data_with_volume = (data * self.volume).astype("int16")
 
                 # Play the audio data
                 sd.play(data_with_volume, samplerate)

@@ -8,11 +8,11 @@ if TYPE_CHECKING:
 
 class OverlaySystem:
     """Screen overlay system for visual region selection.
-    
+
     Creates a semi-transparent fullscreen overlay that allows users to
     select rectangular regions on the screen using marquee selection.
     Used for defining alert and faction detection regions.
-    
+
     Attributes:
         main: Reference to MainMenu instance
         start_x: Starting X coordinate of selection
@@ -23,10 +23,10 @@ class OverlaySystem:
         overlay: Toplevel window for the overlay
         canvas: Canvas widget for drawing selection rectangle
     """
-    
+
     def __init__(self, mainmenu: "MainMenu") -> None:
         """Initialize the overlay system.
-        
+
         Args:
             mainmenu: Reference to the MainMenu instance
         """
@@ -41,7 +41,7 @@ class OverlaySystem:
 
     def create_overlay(self, monitor) -> None:
         """Create a fullscreen overlay on the specified monitor.
-        
+
         Args:
             monitor: Monitor object with position and dimensions
         """
@@ -85,7 +85,7 @@ class OverlaySystem:
 
     def on_button_press(self, event) -> None:
         """Handle mouse button press to start region selection.
-        
+
         Args:
             event: Mouse event with x, y coordinates
         """
@@ -102,7 +102,7 @@ class OverlaySystem:
 
     def on_mouse_drag(self, event) -> None:
         """Handle mouse drag to update selection rectangle.
-        
+
         Args:
             event: Mouse event with current x, y coordinates
         """
@@ -111,10 +111,10 @@ class OverlaySystem:
 
     def on_button_release(self, event) -> None:
         """Handle mouse button release to finalize region selection.
-        
+
         Normalizes coordinates, adjusts for monitor offset, and saves
         the selected region to either alert or faction settings.
-        
+
         Args:
             event: Mouse event with final x, y coordinates
         """
@@ -148,7 +148,7 @@ class OverlaySystem:
 
     def set_alert_region(self) -> None:
         """Save the selected region as the alert detection area.
-        
+
         Applies a 30-pixel Y-offset correction and saves coordinates
         to settings. Marks configuration as changed.
         """
@@ -170,7 +170,7 @@ class OverlaySystem:
 
     def set_faction_region(self) -> None:
         """Save the selected region as the faction detection area.
-        
+
         Applies a 30-pixel Y-offset correction and saves coordinates
         to settings. Marks configuration as changed.
         """

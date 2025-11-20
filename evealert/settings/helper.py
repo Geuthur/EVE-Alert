@@ -11,16 +11,16 @@ ICON = "img/eve.ico"
 
 def get_resource_path(relative_path: str) -> str:
     """Get the absolute path to a resource file.
-    
+
     Resolves relative paths within the evealert directory structure.
     Useful for accessing images, sounds, and configuration files.
-    
+
     Args:
         relative_path: Path relative to the evealert directory
-        
+
     Returns:
         Absolute path to the resource file
-        
+
     Example:
         >>> get_resource_path("img/online.png")
         'C:/path/to/evealert/img/online.png'

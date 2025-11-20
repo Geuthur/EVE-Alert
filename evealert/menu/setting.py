@@ -232,30 +232,30 @@ class SettingMenu:
         try:
             # Validate settings first
             from evealert.settings.validator import ConfigValidator
-            
+
             detection_scale = int(self.detectionscale.get())
             faction_scale = int(self.faction_scale.get())
             cooldown = int(self.cooldown_timer.get())
             volume = int(self.volume_scale.get())
             mute = self.play_alarm.get()
-            
+
             # Validate detection scales
             is_valid, error = ConfigValidator.validate_detection_scale(detection_scale)
             if not is_valid:
                 self.main.write_message(f"Validation Error: {error}", "red")
                 return
-            
+
             is_valid, error = ConfigValidator.validate_detection_scale(faction_scale)
             if not is_valid:
                 self.main.write_message(f"Validation Error: {error}", "red")
                 return
-            
+
             # Validate cooldown
             is_valid, error = ConfigValidator.validate_cooldown_timer(cooldown)
             if not is_valid:
                 self.main.write_message(f"Validation Error: {error}", "red")
                 return
-            
+
             # Apply to AlertAgent if running
             if self.main.alert:
                 self.main.alert.detection = detection_scale
@@ -263,20 +263,27 @@ class SettingMenu:
                 self.main.alert.cooldowntimer = cooldown
                 self.main.alert.volume = volume / 100.0  # Convert to 0.0-1.0
                 self.main.alert.mute = mute
-                
+
                 # Update webhook if changed
                 webhook_url = self.webhook.get()
                 if webhook_url and webhook_url != "Enter a Webhook URL":
                     self._activate_webhook(webhook_url)
                 else:
                     self.main.webhook = None
-                
+
                 self.main.write_message("Settings: Applied to running system.", "green")
-                logger.info("Runtime settings applied: detection=%d, faction_scale=%d, cooldown=%d, mute=%s",
-                           detection_scale, faction_scale, cooldown, mute)
+                logger.info(
+                    "Runtime settings applied: detection=%d, faction_scale=%d, cooldown=%d, mute=%s",
+                    detection_scale,
+                    faction_scale,
+                    cooldown,
+                    mute,
+                )
             else:
-                self.main.write_message("Settings: No running system to apply to.", "yellow")
-                
+                self.main.write_message(
+                    "Settings: No running system to apply to.", "yellow"
+                )
+
         except ValueError as e:
             self.main.write_message(
                 "Setting Menu: Invalid values. Please check your input.", "red"
@@ -558,21 +565,25 @@ class SettingMenu:
             import numpy as np
             import sounddevice as sd
             import soundfile as sf
+
             from evealert.constants import AUDIO_CHANNELS
             from evealert.manager.alertmanager import ALARM_SOUND
-            
+
             # Check if muted
             if self.play_alarm.get():
-                self.main.write_message("Audio Test: Alarm is muted. Uncheck 'Mute Alarm' to test.", "yellow")
+                self.main.write_message(
+                    "Audio Test: Alarm is muted. Uncheck 'Mute Alarm' to test.",
+                    "yellow",
+                )
                 return
-            
+
             self.main.write_message("Audio Test: Playing alarm sound...", "green")
-            
+
             # Play sound directly using sounddevice
             try:
                 # Read audio data with soundfile
                 data, samplerate = sf.read(ALARM_SOUND, dtype="int16")
-                
+
                 # Check data shape and adjust channels if necessary
                 if data.ndim == 1:
                     # Convert Mono -> Stereo
@@ -580,18 +591,22 @@ class SettingMenu:
                 elif data.ndim == 2 and data.shape[1] == 1:
                     # (N, 1) -> (N, AUDIO_CHANNELS)
                     data = np.repeat(data, AUDIO_CHANNELS, axis=1)
-                
+
                 # Play the audio data (blocking)
                 sd.play(data, samplerate)
                 sd.wait()  # Wait for playback to finish
-                
+
                 self.main.write_message("Audio Test: Alarm sound completed.", "green")
             except FileNotFoundError:
-                self.main.write_message(f"Audio Test: Sound file not found: {ALARM_SOUND}", "red")
+                self.main.write_message(
+                    f"Audio Test: Sound file not found: {ALARM_SOUND}", "red"
+                )
             except Exception as e:
-                self.main.write_message(f"Audio Test: Error playing sound. {str(e)}", "red")
+                self.main.write_message(
+                    f"Audio Test: Error playing sound. {str(e)}", "red"
+                )
                 logger.exception("Error testing alarm sound: %s", e)
-                
+
         except Exception as e:
             self.main.write_message(f"Audio Test: Error. {str(e)}", "red")
             logger.exception("Error in test_alarm_sound: %s", e)
@@ -602,21 +617,25 @@ class SettingMenu:
             import numpy as np
             import sounddevice as sd
             import soundfile as sf
+
             from evealert.constants import AUDIO_CHANNELS
             from evealert.manager.alertmanager import FACTION_SOUND
-            
+
             # Check if muted
             if self.play_alarm.get():
-                self.main.write_message("Audio Test: Alarm is muted. Uncheck 'Mute Alarm' to test.", "yellow")
+                self.main.write_message(
+                    "Audio Test: Alarm is muted. Uncheck 'Mute Alarm' to test.",
+                    "yellow",
+                )
                 return
-            
+
             self.main.write_message("Audio Test: Playing faction sound...", "green")
-            
+
             # Play sound directly using sounddevice
             try:
                 # Read audio data with soundfile
                 data, samplerate = sf.read(FACTION_SOUND, dtype="int16")
-                
+
                 # Check data shape and adjust channels if necessary
                 if data.ndim == 1:
                     # Convert Mono -> Stereo
@@ -624,22 +643,26 @@ class SettingMenu:
                 elif data.ndim == 2 and data.shape[1] == 1:
                     # (N, 1) -> (N, AUDIO_CHANNELS)
                     data = np.repeat(data, AUDIO_CHANNELS, axis=1)
-                
+
                 # Apply volume (convert 0-100 to 0.0-1.0)
                 volume = self.volume_scale.get() / 100.0
-                data_with_volume = (data * volume).astype('int16')
-                
+                data_with_volume = (data * volume).astype("int16")
+
                 # Play the audio data (blocking)
                 sd.play(data_with_volume, samplerate)
                 sd.wait()  # Wait for playback to finish
-                
+
                 self.main.write_message("Audio Test: Faction sound completed.", "green")
             except FileNotFoundError:
-                self.main.write_message(f"Audio Test: Sound file not found: {FACTION_SOUND}", "red")
+                self.main.write_message(
+                    f"Audio Test: Sound file not found: {FACTION_SOUND}", "red"
+                )
             except Exception as e:
-                self.main.write_message(f"Audio Test: Error playing sound. {str(e)}", "red")
+                self.main.write_message(
+                    f"Audio Test: Error playing sound. {str(e)}", "red"
+                )
                 logger.exception("Error testing faction sound: %s", e)
-                
+
         except Exception as e:
             self.main.write_message(f"Audio Test: Error. {str(e)}", "red")
             logger.exception("Error in test_faction_sound: %s", e)

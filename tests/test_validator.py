@@ -185,5 +185,5 @@ class TestConfigValidator(unittest.TestCase):
         self.assertGreater(len(errors), 0)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

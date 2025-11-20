@@ -21,11 +21,11 @@ now = datetime.now()
 
 class Vision:
     """Computer vision handler for EVE Online UI element detection.
-    
+
     Uses OpenCV template matching to detect enemy players and faction spawns
     in EVE Online screenshots. Supports multiple template images and various
     UI scaling factors.
-    
+
     Attributes:
         needle_imgs: List of template images to match
         needle_dims: Dimensions of each template image
@@ -33,7 +33,7 @@ class Vision:
         debug_mode: Show enemy detection visualization
         debug_mode_faction: Show faction detection visualization
     """
-    
+
     needle_img = None
     needle_w = 0
     needle_h = 0
@@ -43,7 +43,7 @@ class Vision:
     # TM_CCOEFF, TM_CCOEFF_NORMED, TM_CCORR, TM_CCORR_NORMED, TM_SQDIFF, TM_SQDIFF_NORMED
     def __init__(self, needle_img_paths, method=cv.TM_CCOEFF_NORMED):
         """Initialize the Vision handler.
-        
+
         Args:
             needle_img_paths: List of paths to template images
             method: OpenCV template matching method (default: TM_CCOEFF_NORMED)
@@ -119,7 +119,8 @@ class Vision:
                     haystack_img_norm, needle_img_norm, self.method
                 )
                 detection_treshhold = max(
-                    min(threshold / 100, DETECTION_THRESHOLD_MAX), DETECTION_THRESHOLD_MIN
+                    min(threshold / 100, DETECTION_THRESHOLD_MAX),
+                    DETECTION_THRESHOLD_MIN,
                 )  # Ensures value between 0.1 and 1.0
 
             except Exception as e:
@@ -143,7 +144,9 @@ class Vision:
 
             # Apply group rectangles.
             rectangles, _ = cv.groupRectangles(
-                rectangles, groupThreshold=GROUP_RECTANGLES_THRESHOLD, eps=GROUP_RECTANGLES_EPS
+                rectangles,
+                groupThreshold=GROUP_RECTANGLES_THRESHOLD,
+                eps=GROUP_RECTANGLES_EPS,
             )
 
             points = []

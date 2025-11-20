@@ -5,7 +5,6 @@ import os
 from typing import Any, Dict, Optional, Tuple
 
 from evealert.constants import DETECTION_SCALE_MAX, DETECTION_SCALE_MIN
-from evealert.exceptions import ValidationError
 
 logger = logging.getLogger("validator")
 
@@ -54,7 +53,9 @@ class ConfigValidator:
         return True, None
 
     @staticmethod
-    def validate_detection_scale(scale: int, scale_name: str = "Detection scale") -> Tuple[bool, Optional[str]]:
+    def validate_detection_scale(
+        scale: int, scale_name: str = "Detection scale"
+    ) -> Tuple[bool, Optional[str]]:
         """
         Validate detection scale value.
 
@@ -126,7 +127,9 @@ class ConfigValidator:
         return True, None
 
     @staticmethod
-    def validate_audio_file(file_path: str, file_name: str = "Audio file") -> Tuple[bool, Optional[str]]:
+    def validate_audio_file(
+        file_path: str, file_name: str = "Audio file"
+    ) -> Tuple[bool, Optional[str]]:
         """
         Validate audio file exists and is accessible.
 
