@@ -21,3 +21,6 @@ coverage.xml
 # Test fixtures
 tests/fixtures/*.png
 tests/fixtures/*.wav
+
+# Pre-commit cache
+.cache/
