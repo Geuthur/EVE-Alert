@@ -112,8 +112,6 @@ class AlertAgent:
 
     def _validate_audio_files(self):
         """Validate that required audio files exist."""
-        from evealert.settings.validator import ConfigValidator
-
         valid_alarm, error_alarm = ConfigValidator.validate_audio_file(
             ALARM_SOUND, "Alarm sound"
         )

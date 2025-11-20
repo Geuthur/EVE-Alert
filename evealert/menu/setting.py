@@ -231,6 +231,7 @@ class SettingMenu:
         """Apply settings to the running system without restart."""
         try:
             # Validate settings first
+            # pylint: disable=import-outside-toplevel
             from evealert.settings.validator import ConfigValidator
 
             detection_scale = int(self.detectionscale.get())
@@ -560,12 +561,13 @@ class SettingMenu:
         self.empty_label_3.configure(text=f"{int(slider_value)}%")
 
     def test_alarm_sound(self):
-        """Test the alarm sound playback."""
+        """Test alarm sound playback."""
         try:
-            import numpy as np
-            import sounddevice as sd
-            import soundfile as sf
+            import numpy as np  # pylint: disable=import-outside-toplevel
+            import sounddevice as sd  # pylint: disable=import-outside-toplevel
+            import soundfile as sf  # pylint: disable=import-outside-toplevel
 
+            # pylint: disable=import-outside-toplevel
             from evealert.constants import AUDIO_CHANNELS
             from evealert.manager.alertmanager import ALARM_SOUND
 
@@ -612,12 +614,13 @@ class SettingMenu:
             logger.exception("Error in test_alarm_sound: %s", e)
 
     def test_faction_sound(self):
-        """Test the faction sound playback."""
+        """Test faction sound playback."""
         try:
-            import numpy as np
-            import sounddevice as sd
-            import soundfile as sf
+            import numpy as np  # pylint: disable=import-outside-toplevel
+            import sounddevice as sd  # pylint: disable=import-outside-toplevel
+            import soundfile as sf  # pylint: disable=import-outside-toplevel
 
+            # pylint: disable=import-outside-toplevel
             from evealert.constants import AUDIO_CHANNELS
             from evealert.manager.alertmanager import FACTION_SOUND
 
