@@ -5,11 +5,13 @@ This directory contains development documentation, sprint summaries, and improve
 ## 📚 Documentation Structure
 
 ### Development Process
+
 - **[PULL_REQUEST_DESCRIPTION.md](PULL_REQUEST_DESCRIPTION.md)** - Comprehensive PR description for upstream contribution
 - **[PHASE_5_CHECKLIST.md](PHASE_5_CHECKLIST.md)** - Testing & CI/CD implementation checklist
 - **[IMPROVEMENT_PLAN.md](IMPROVEMENT_PLAN.md)** - Future enhancements roadmap
 
 ### Sprint Summaries
+
 - **[SPRINT_1_SUMMARY.md](SPRINT_1_SUMMARY.md)** - Foundation & Code Structure
 - **[SPRINT_3_SUMMARY.md](SPRINT_3_SUMMARY.md)** - Type Hints & Documentation
 - **[SPRINT_4_SUMMARY.md](SPRINT_4_SUMMARY.md)** - User Features (Statistics, Runtime Config)
@@ -18,11 +20,13 @@ This directory contains development documentation, sprint summaries, and improve
 ## 🎯 Quick Links
 
 ### For Contributors
+
 - Start with [IMPROVEMENT_PLAN.md](IMPROVEMENT_PLAN.md) to see the roadmap
 - Review [PHASE_5_SUMMARY.md](PHASE_5_SUMMARY.md) for testing guidelines
 - Check sprint summaries for architectural decisions
 
 ### For Reviewers
+
 - See [PULL_REQUEST_DESCRIPTION.md](PULL_REQUEST_DESCRIPTION.md) for complete change overview
 - Review [PHASE_5_CHECKLIST.md](PHASE_5_CHECKLIST.md) for quality metrics
 
