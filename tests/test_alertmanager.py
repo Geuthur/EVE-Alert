@@ -5,7 +5,7 @@ import tempfile
 import time
 import unittest
 from pathlib import Path
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import MagicMock, patch
 
 from evealert.manager.alertmanager import AlertAgent
 from evealert.statistics import AlarmStatistics
