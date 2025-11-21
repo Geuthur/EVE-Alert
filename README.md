@@ -1,6 +1,6 @@
 # Eve Online Alert
 
-![Release](https://img.shields.io/pypi/v/EVE-Alert?label=release)
+![Release](https://img.shields.io/github/v/release/Geuthur/EVE-Alert)
 ![Licence](https://img.shields.io/github/license/geuthur/EVE-Alert)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Geuthur/EVE-Alert-Opensource/main.svg)](https://results.pre-commit.ci/latest/github/Geuthur/EVE-Alert-Opensource/main)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
