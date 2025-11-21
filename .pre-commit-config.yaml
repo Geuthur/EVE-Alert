@@ -19,6 +19,12 @@ ci:
   autoupdate_schedule: monthly
   submodules: false
 
+# https://pre-commit.com/#pre-commit-configyaml---top-level
+exclude: |
+  (?x)(
+    .github/|
+  )
+
 # pre-commit setup
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -131,8 +137,7 @@ repos:
         name: PyUpgrade
         description: Upgrade syntax to newer versions of Python.
         args:
-          - --py38-plus
-        exclude: '^main\.py$'
+          - --py310-plus  # Minimum required Python version for EVE-Alert. Update as needed.
 
   - repo: https://github.com/pycqa/flake8
     rev: 7.3.0
@@ -170,7 +175,7 @@ repos:
         name: Black
         description: Format Python code.
         args:
-          - --target-version=py38
+          - --target-version=py310  # Minimum required Python version for EVE-Alert. Update as needed.
 
   - repo: https://github.com/asottile/blacken-docs
     rev: 1.20.0
@@ -179,9 +184,9 @@ repos:
         name: Blacken docs
         description: Format Python code in documentation files.
         additional_dependencies:
-          - black==24.4.2  # https://github.com/psf/black/releases/latest
+          - black==25.9.0  # https://github.com/psf/black/releases/latest
         args:
-          - --target-version=py38
+          - --target-version=py310  # Minimum required Python version for EVE-Alert. Update as needed.
 
   - repo: https://github.com/executablebooks/mdformat
     rev: 1.0.0
@@ -189,16 +194,27 @@ repos:
       - id: mdformat
         name: Mdformat
         description: Format Markdown files.
-        exclude: |
-          (?x)(
-            .github/|
-            static/(.*)/libs/
-          )
         additional_dependencies:
-          - mdformat-gfm==0.3.6  # Mdformat plugin for GitHub Flavored Markdown compatibility » https://github.com/hukkin/mdformat-gfm/tags
-          - mdformat-toc==0.3.0  # Mdformat plugin to generate a table of contents » https://github.com/hukkin/mdformat-toc/tags
+          - mdformat-gfm==1.0.0  # Mdformat plugin for GitHub Flavored Markdown compatibility » https://github.com/hukkin/mdformat-gfm/tags
+          - mdformat-toc==0.5.0  # Mdformat plugin to generate a table of contents » https://github.com/hukkin/mdformat-toc/tags
           - mdformat-black==0.1.1  # Mdformat plugin to Blacken Python code blocks » https://github.com/hukkin/mdformat-black/tags
-          - mdformat-shfmt==0.1.0  # Mdformat plugin to format shell code blocks » https://github.com/hukkin/mdformat-shfmt/tags
+          - mdformat-shfmt==0.2.0  # Mdformat plugin to format shell code blocks » https://github.com/hukkin/mdformat-shfmt/tags
+
+  - repo: https://github.com/tox-dev/pyproject-fmt
+    rev: v2.11.0
+    hooks:
+      - id: pyproject-fmt
+        name: pyproject.toml formatter
+        description: Format the pyproject.toml file.
+        args:
+          - --indent=4
+
+  - repo: https://github.com/abravalheri/validate-pyproject
+    rev: v0.24.1
+    hooks:
+      - id: validate-pyproject
+        name: Validate pyproject.toml
+        description: Validate the pyproject.toml file.
 
   - repo: https://github.com/pylint-dev/pylint
     rev: v4.0.2
@@ -207,7 +223,7 @@ repos:
         name: Pylint
         description: Check for errors and code smells in Python code.
         args:
-          - --py-version=3.8
+          - --py-version=3.10
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.34.1
