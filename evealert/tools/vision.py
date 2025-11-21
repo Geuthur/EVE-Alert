@@ -4,6 +4,15 @@ from datetime import datetime
 import cv2 as cv
 import numpy as np
 
+from evealert.constants import (
+    CV_DETECTION_COLOR,
+    CV_LINE_TYPE,
+    CV_RECTANGLE_THICKNESS,
+    DETECTION_THRESHOLD_MAX,
+    DETECTION_THRESHOLD_MIN,
+    GROUP_RECTANGLES_EPS,
+    GROUP_RECTANGLES_THRESHOLD,
+)
 from evealert.exceptions import RegionSizeError, ScreenshotError
 
 logger = logging.getLogger("tools")
@@ -11,6 +20,20 @@ now = datetime.now()
 
 
 class Vision:
+    """Computer vision handler for EVE Online UI element detection.
+
+    Uses OpenCV template matching to detect enemy players and faction spawns
+    in EVE Online screenshots. Supports multiple template images and various
+    UI scaling factors.
+
+    Attributes:
+        needle_imgs: List of template images to match
+        needle_dims: Dimensions of each template image
+        method: OpenCV template matching method
+        debug_mode: Show enemy detection visualization
+        debug_mode_faction: Show faction detection visualization
+    """
+
     needle_img = None
     needle_w = 0
     needle_h = 0
@@ -19,6 +42,12 @@ class Vision:
     # There are 6 methods to choose from:
     # TM_CCOEFF, TM_CCOEFF_NORMED, TM_CCORR, TM_CCORR_NORMED, TM_SQDIFF, TM_SQDIFF_NORMED
     def __init__(self, needle_img_paths, method=cv.TM_CCOEFF_NORMED):
+        """Initialize the Vision handler.
+
+        Args:
+            needle_img_paths: List of paths to template images
+            method: OpenCV template matching method (default: TM_CCOEFF_NORMED)
+        """
         # Load the images we're trying to match
         self.needle_imgs = [
             cv.imread(path, cv.IMREAD_UNCHANGED) for path in needle_img_paths
@@ -43,9 +72,11 @@ class Vision:
         """Returns True if the faction vision window is open."""
         return self.debug_mode_faction
 
-    def vision_process(self, haystack_img, threshold=0.5, vision_mode="Enemy"):
+    def vision_process(
+        self, haystack_img, threshold: float = 0.5, vision_mode: str = "Enemy"
+    ) -> tuple:
         all_points = []
-        color = (0, 255, 0)
+        color = CV_DETECTION_COLOR
 
         for idx, (needle_img, needle_dim) in enumerate(
             zip(self.needle_imgs, self.needle_dims)
@@ -88,7 +119,8 @@ class Vision:
                     haystack_img_norm, needle_img_norm, self.method
                 )
                 detection_treshhold = max(
-                    min(threshold / 100, 1.0), 0.1
+                    min(threshold / 100, DETECTION_THRESHOLD_MAX),
+                    DETECTION_THRESHOLD_MIN,
                 )  # Ensures value between 0.1 and 1.0
 
             except Exception as e:
@@ -111,7 +143,11 @@ class Vision:
                 rectangles.append(rect)
 
             # Apply group rectangles.
-            rectangles, _ = cv.groupRectangles(rectangles, groupThreshold=1, eps=0.5)
+            rectangles, _ = cv.groupRectangles(
+                rectangles,
+                groupThreshold=GROUP_RECTANGLES_THRESHOLD,
+                eps=GROUP_RECTANGLES_EPS,
+            )
 
             points = []
             if len(rectangles):
@@ -135,8 +171,8 @@ class Vision:
                                 top_left,
                                 bottom_right,
                                 color=color,
-                                lineType=cv.LINE_4,
-                                thickness=2,
+                                lineType=CV_LINE_TYPE,
+                                thickness=CV_RECTANGLE_THICKNESS,
                             )
                         except Exception as e:
                             logger.error("Rectangle Error: %s", e)
@@ -144,13 +180,13 @@ class Vision:
             all_points.extend(points)
         return all_points, haystack_img
 
-    def clean_up(self):
+    def clean_up(self) -> None:
         """Close all open windows."""
         cv.destroyAllWindows()
         self.debug_mode = False
         self.debug_mode_faction = False
 
-    def destroy_vision(self, vision_mode="Enemy"):
+    def destroy_vision(self, vision_mode: str = "Enemy") -> None:
         """Close the vision window."""
         if vision_mode == "Enemy":
             self.debug_mode = False
@@ -158,7 +194,7 @@ class Vision:
             self.debug_mode_faction = False
         cv.destroyWindow(vision_mode)
 
-    def find(self, haystack_img, threshold=0.5):
+    def find(self, haystack_img, threshold: float = 0.5) -> list:
         try:
             all_points, detection_image = self.vision_process(
                 haystack_img, threshold, "Enemy"
@@ -178,7 +214,7 @@ class Vision:
                 self.enemy = None
         return all_points
 
-    def find_faction(self, haystack_img, threshold=0.5):
+    def find_faction(self, haystack_img, threshold: float = 0.5) -> list:
         try:
             all_points, detection_image = self.vision_process(
                 haystack_img, threshold, "Faction"

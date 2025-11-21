@@ -21,6 +21,7 @@ DEFAULT_SETTINGS = {
     "detectionscale": {"value": 90},
     "faction_scale": {"value": 90},
     "cooldown_timer": {"value": 30},
+    "volume": {"value": 100},
     "server": {
         "name": "Enter a Webhook URL",
         "system": "Enter a System Name",
@@ -80,14 +81,14 @@ class SettingMenu:
         for key, value in defaults.items():
             if key in settings:
                 if isinstance(value, dict) and isinstance(settings[key], dict):
-                    # Rekursiv verschachtelte Dictionaries zusammenführen
+                    # Recursively merge nested dictionaries
                     merged_settings[key] = self.merge_settings_with_defaults(
                         settings[key], value
                     )
                 else:
                     merged_settings[key] = settings[key]
             else:
-                # Fehlende Schlüssel mit Standardwerten ergänzen
+                # Fill missing keys with default values
                 merged_settings[key] = value
 
         return merged_settings
@@ -147,6 +148,9 @@ class SettingMenu:
             self.cooldown_timer.delete(0, customtkinter.END)
             self.cooldown_timer.insert(0, settings["cooldown_timer"]["value"])
 
+            self.volume_scale.set(settings["volume"]["value"])
+            self.volumeslider_event(settings["volume"]["value"])
+
             self.system_name.delete(0, customtkinter.END)
             self.system_name.insert(0, settings["server"]["system"])
 
@@ -182,6 +186,7 @@ class SettingMenu:
         self.changed = True
 
     def save(self):
+        """Save settings to disk only (does not apply to running system)."""
         try:
             settings = DEFAULT_SETTINGS.copy()
             settings.update(
@@ -206,6 +211,7 @@ class SettingMenu:
                     "detectionscale": {"value": int(self.detectionscale.get())},
                     "faction_scale": {"value": int(self.faction_scale.get())},
                     "cooldown_timer": {"value": int(self.cooldown_timer.get())},
+                    "volume": {"value": int(self.volume_scale.get())},
                     "server": {
                         "name": self.webhook.get(),
                         "system": self.system_name.get(),
@@ -213,12 +219,77 @@ class SettingMenu:
                     },
                 }
             )
+            self.save_settings(settings)
+            self.main.write_message("Settings: Saved to disk.", "green")
         except ValueError as e:
             self.main.write_message(
                 "Setting Menu: Error saving settings. Please check the values.", "red"
             )
             logger.error(e)
-        self.save_settings(settings)
+
+    def apply_settings_runtime(self):
+        """Apply settings to the running system without restart."""
+        try:
+            # Validate settings first
+            # pylint: disable=import-outside-toplevel
+            from evealert.settings.validator import ConfigValidator
+
+            detection_scale = int(self.detectionscale.get())
+            faction_scale = int(self.faction_scale.get())
+            cooldown = int(self.cooldown_timer.get())
+            volume = int(self.volume_scale.get())
+            mute = self.play_alarm.get()
+
+            # Validate detection scales
+            is_valid, error = ConfigValidator.validate_detection_scale(detection_scale)
+            if not is_valid:
+                self.main.write_message(f"Validation Error: {error}", "red")
+                return
+
+            is_valid, error = ConfigValidator.validate_detection_scale(faction_scale)
+            if not is_valid:
+                self.main.write_message(f"Validation Error: {error}", "red")
+                return
+
+            # Validate cooldown
+            is_valid, error = ConfigValidator.validate_cooldown_timer(cooldown)
+            if not is_valid:
+                self.main.write_message(f"Validation Error: {error}", "red")
+                return
+
+            # Apply to AlertAgent if running
+            if self.main.alert:
+                self.main.alert.detection = detection_scale
+                self.main.alert.detection_faction = faction_scale
+                self.main.alert.cooldowntimer = cooldown
+                self.main.alert.volume = volume / 100.0  # Convert to 0.0-1.0
+                self.main.alert.mute = mute
+
+                # Update webhook if changed
+                webhook_url = self.webhook.get()
+                if webhook_url and webhook_url != "Enter a Webhook URL":
+                    self._activate_webhook(webhook_url)
+                else:
+                    self.main.webhook = None
+
+                self.main.write_message("Settings: Applied to running system.", "green")
+                logger.info(
+                    "Runtime settings applied: detection=%d, faction_scale=%d, cooldown=%d, mute=%s",
+                    detection_scale,
+                    faction_scale,
+                    cooldown,
+                    mute,
+                )
+            else:
+                self.main.write_message(
+                    "Settings: No running system to apply to.", "yellow"
+                )
+
+        except ValueError as e:
+            self.main.write_message(
+                "Setting Menu: Invalid values. Please check your input.", "red"
+            )
+            logger.error("Runtime settings apply error: %s", e)
 
     def clean_up(self):
         """Cleans up the settings window."""
@@ -234,7 +305,7 @@ class SettingMenu:
     def create_menu(self):
         """Load the settings from the settings file."""
 
-        # Verwende ein eigenes Frame für das Menü
+        # Use a separate frame for the menu
         self.menu_frame = customtkinter.CTkFrame(self.setting_window)
         self.menu_frame.pack(side="left", padx=20, pady=20)
 
@@ -308,6 +379,22 @@ class SettingMenu:
             command=self.factionslider_event,
         )
 
+        # Row 8 - Init
+        # Volume Slider
+        self.volume_slider_label = customtkinter.CTkLabel(
+            self.menu_frame, text="Volume"
+        )
+        self.volume_scale = customtkinter.DoubleVar()
+        self.volume_slider = customtkinter.CTkSlider(
+            self.menu_frame,
+            from_=0,
+            to=100,
+            orientation="horizontal",
+            number_of_steps=100,
+            variable=self.volume_scale,
+            command=self.volumeslider_event,
+        )
+
         self.cooldown_timer_label = customtkinter.CTkLabel(
             self.menu_frame, text="Cooldown Timer:", justify="left"
         )
@@ -318,6 +405,10 @@ class SettingMenu:
 
         self.save_button = customtkinter.CTkButton(
             self.menu_frame, text="Save", command=self.save
+        )
+
+        self.apply_button = customtkinter.CTkButton(
+            self.menu_frame, text="Apply", command=self.apply_settings_runtime
         )
 
         self.close_button = customtkinter.CTkButton(
@@ -332,6 +423,10 @@ class SettingMenu:
             self.menu_frame, text=self.slider2.get()
         )
 
+        self.empty_label_3 = customtkinter.CTkLabel(
+            self.menu_frame, text=f"{int(self.volume_slider.get())}%"
+        )
+
         self.webhook_label = customtkinter.CTkLabel(
             self.menu_frame, text="Webhook:", justify="left"
         )
@@ -343,6 +438,14 @@ class SettingMenu:
 
         self.play_alarm_checkbox = customtkinter.CTkCheckBox(
             self.menu_frame, text="Mute Alarm", variable=self.play_alarm
+        )
+
+        self.test_alarm_button = customtkinter.CTkButton(
+            self.menu_frame, text="Test Alarm Sound", command=self.test_alarm_sound
+        )
+
+        self.test_faction_button = customtkinter.CTkButton(
+            self.menu_frame, text="Test Faction Sound", command=self.test_faction_sound
         )
 
         # Init Visuals
@@ -389,20 +492,31 @@ class SettingMenu:
         self.faction_slider_label.grid(row=7, column=0)
         self.slider2.grid(row=7, column=1)
 
+        # Volume Slider Visual
+        self.empty_label_3.grid(row=8, column=2)
+        self.volume_slider_label.grid(row=8, column=0)
+        self.volume_slider.grid(row=8, column=1)
+
         # Webhook Visual
-        self.webhook_label.grid(row=8, column=0)
-        self.webhook.grid(row=8, column=1)
+        self.webhook_label.grid(row=9, column=0)
+        self.webhook.grid(row=9, column=1)
 
         # System Name Visual
-        self.system_name_label.grid(row=9, column=0)
-        self.system_name.grid(row=9, column=1)
+        self.system_name_label.grid(row=10, column=0)
+        self.system_name.grid(row=10, column=1)
 
-        self.play_alarm_checkbox.grid(row=9, column=2)
+        self.play_alarm_checkbox.grid(row=10, column=2)
+
+        # Test Audio Buttons
+        self.test_alarm_button.grid(row=11, column=0, pady=(10, 0))
+        self.test_faction_button.grid(row=11, column=1, pady=(10, 0))
 
         # Save Button
-        self.save_button.grid(row=11, column=0, pady=10)
+        self.save_button.grid(row=12, column=0, pady=10)
+        # Apply Button
+        self.apply_button.grid(row=12, column=1, pady=10)
         # Close Button
-        self.close_button.grid(row=11, column=2, pady=10)
+        self.close_button.grid(row=12, column=2, pady=10)
 
         self.setting_window.protocol("WM_DELETE_WINDOW", self.clean_up)
 
@@ -414,7 +528,7 @@ class SettingMenu:
                 fg_color="#fa0202", hover_color="#bd291e"
             )
 
-            # Position des Beschreibungsfensters rechts neben dem Hauptmenü
+            # Position the description window to the right of the main menu
             config_menu_x, config_menu_y = (
                 self.main.winfo_x(),
                 self.main.winfo_y(),
@@ -442,3 +556,116 @@ class SettingMenu:
 
     def factionslider_event(self, slider_value):
         self.empty_label_2.configure(text=slider_value)
+
+    def volumeslider_event(self, slider_value):
+        self.empty_label_3.configure(text=f"{int(slider_value)}%")
+
+    def test_alarm_sound(self):
+        """Test alarm sound playback."""
+        try:
+            import numpy as np  # pylint: disable=import-outside-toplevel
+            import sounddevice as sd  # pylint: disable=import-outside-toplevel
+            import soundfile as sf  # pylint: disable=import-outside-toplevel
+
+            # pylint: disable=import-outside-toplevel
+            from evealert.constants import AUDIO_CHANNELS
+            from evealert.manager.alertmanager import ALARM_SOUND
+
+            # Check if muted
+            if self.play_alarm.get():
+                self.main.write_message(
+                    "Audio Test: Alarm is muted. Uncheck 'Mute Alarm' to test.",
+                    "yellow",
+                )
+                return
+
+            self.main.write_message("Audio Test: Playing alarm sound...", "green")
+
+            # Play sound directly using sounddevice
+            try:
+                # Read audio data with soundfile
+                data, samplerate = sf.read(ALARM_SOUND, dtype="int16")
+
+                # Check data shape and adjust channels if necessary
+                if data.ndim == 1:
+                    # Convert Mono -> Stereo
+                    data = np.stack([data, data], axis=-1)
+                elif data.ndim == 2 and data.shape[1] == 1:
+                    # (N, 1) -> (N, AUDIO_CHANNELS)
+                    data = np.repeat(data, AUDIO_CHANNELS, axis=1)
+
+                # Play the audio data (blocking)
+                sd.play(data, samplerate)
+                sd.wait()  # Wait for playback to finish
+
+                self.main.write_message("Audio Test: Alarm sound completed.", "green")
+            except FileNotFoundError:
+                self.main.write_message(
+                    f"Audio Test: Sound file not found: {ALARM_SOUND}", "red"
+                )
+            except Exception as e:
+                self.main.write_message(
+                    f"Audio Test: Error playing sound. {str(e)}", "red"
+                )
+                logger.exception("Error testing alarm sound: %s", e)
+
+        except Exception as e:
+            self.main.write_message(f"Audio Test: Error. {str(e)}", "red")
+            logger.exception("Error in test_alarm_sound: %s", e)
+
+    def test_faction_sound(self):
+        """Test faction sound playback."""
+        try:
+            import numpy as np  # pylint: disable=import-outside-toplevel
+            import sounddevice as sd  # pylint: disable=import-outside-toplevel
+            import soundfile as sf  # pylint: disable=import-outside-toplevel
+
+            # pylint: disable=import-outside-toplevel
+            from evealert.constants import AUDIO_CHANNELS
+            from evealert.manager.alertmanager import FACTION_SOUND
+
+            # Check if muted
+            if self.play_alarm.get():
+                self.main.write_message(
+                    "Audio Test: Alarm is muted. Uncheck 'Mute Alarm' to test.",
+                    "yellow",
+                )
+                return
+
+            self.main.write_message("Audio Test: Playing faction sound...", "green")
+
+            # Play sound directly using sounddevice
+            try:
+                # Read audio data with soundfile
+                data, samplerate = sf.read(FACTION_SOUND, dtype="int16")
+
+                # Check data shape and adjust channels if necessary
+                if data.ndim == 1:
+                    # Convert Mono -> Stereo
+                    data = np.stack([data, data], axis=-1)
+                elif data.ndim == 2 and data.shape[1] == 1:
+                    # (N, 1) -> (N, AUDIO_CHANNELS)
+                    data = np.repeat(data, AUDIO_CHANNELS, axis=1)
+
+                # Apply volume (convert 0-100 to 0.0-1.0)
+                volume = self.volume_scale.get() / 100.0
+                data_with_volume = (data * volume).astype("int16")
+
+                # Play the audio data (blocking)
+                sd.play(data_with_volume, samplerate)
+                sd.wait()  # Wait for playback to finish
+
+                self.main.write_message("Audio Test: Faction sound completed.", "green")
+            except FileNotFoundError:
+                self.main.write_message(
+                    f"Audio Test: Sound file not found: {FACTION_SOUND}", "red"
+                )
+            except Exception as e:
+                self.main.write_message(
+                    f"Audio Test: Error playing sound. {str(e)}", "red"
+                )
+                logger.exception("Error testing faction sound: %s", e)
+
+        except Exception as e:
+            self.main.write_message(f"Audio Test: Error. {str(e)}", "red")
+            logger.exception("Error in test_faction_sound: %s", e)

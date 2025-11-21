@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 import customtkinter
 
@@ -7,17 +7,44 @@ if TYPE_CHECKING:
 
 
 class OverlaySystem:
-    def __init__(self, mainmenu: "MainMenu"):
+    """Screen overlay system for visual region selection.
+
+    Creates a semi-transparent fullscreen overlay that allows users to
+    select rectangular regions on the screen using marquee selection.
+    Used for defining alert and faction detection regions.
+
+    Attributes:
+        main: Reference to MainMenu instance
+        start_x: Starting X coordinate of selection
+        start_y: Starting Y coordinate of selection
+        end_x: Ending X coordinate of selection
+        end_y: Ending Y coordinate of selection
+        rect: Canvas rectangle object for visual feedback
+        overlay: Toplevel window for the overlay
+        canvas: Canvas widget for drawing selection rectangle
+    """
+
+    def __init__(self, mainmenu: "MainMenu") -> None:
+        """Initialize the overlay system.
+
+        Args:
+            mainmenu: Reference to the MainMenu instance
+        """
         self.main = mainmenu
-        self.start_x = None
-        self.start_y = None
-        self.end_x = None
-        self.end_y = None
+        self.start_x: Optional[int] = None
+        self.start_y: Optional[int] = None
+        self.end_x: Optional[int] = None
+        self.end_y: Optional[int] = None
         self.rect = None
         self.overlay = None
         self.canvas = None
 
-    def create_overlay(self, monitor):
+    def create_overlay(self, monitor) -> None:
+        """Create a fullscreen overlay on the specified monitor.
+
+        Args:
+            monitor: Monitor object with position and dimensions
+        """
         self.clean_up()
         self.overlay = customtkinter.CTkToplevel(self.main)
         self.overlay.attributes("-alpha", 0.3)
@@ -40,7 +67,8 @@ class OverlaySystem:
         self.canvas.bind("<B1-Motion>", self.on_mouse_drag)
         self.canvas.bind("<ButtonRelease-1>", self.on_button_release)
 
-    def clean_up(self):
+    def clean_up(self) -> None:
+        """Destroy the overlay and reset all selection state."""
         if self.overlay:
             self.overlay.destroy()
             self.overlay = None
@@ -55,7 +83,12 @@ class OverlaySystem:
         self.end_y = None
         self.rect = None
 
-    def on_button_press(self, event):
+    def on_button_press(self, event) -> None:
+        """Handle mouse button press to start region selection.
+
+        Args:
+            event: Mouse event with x, y coordinates
+        """
         self.start_x = event.x
         self.start_y = event.y
         self.rect = self.canvas.create_rectangle(
@@ -67,11 +100,24 @@ class OverlaySystem:
             width=3,
         )
 
-    def on_mouse_drag(self, event):
+    def on_mouse_drag(self, event) -> None:
+        """Handle mouse drag to update selection rectangle.
+
+        Args:
+            event: Mouse event with current x, y coordinates
+        """
         cur_x, cur_y = (event.x, event.y)
         self.canvas.coords(self.rect, self.start_x, self.start_y, cur_x, cur_y)
 
-    def on_button_release(self, event):
+    def on_button_release(self, event) -> None:
+        """Handle mouse button release to finalize region selection.
+
+        Normalizes coordinates, adjusts for monitor offset, and saves
+        the selected region to either alert or faction settings.
+
+        Args:
+            event: Mouse event with final x, y coordinates
+        """
         self.end_x, self.end_y = (event.x, event.y)
 
         # Check if the user selected a region
@@ -100,7 +146,12 @@ class OverlaySystem:
         elif self.main.menu.config.is_faction_region:
             self.set_faction_region()
 
-    def set_alert_region(self):
+    def set_alert_region(self) -> None:
+        """Save the selected region as the alert detection area.
+
+        Applies a 30-pixel Y-offset correction and saves coordinates
+        to settings. Marks configuration as changed.
+        """
         settings = self.main.menu.setting.load_settings()
         settings["alert_region_1"]["x"] = self.start_x
         settings["alert_region_1"]["y"] = (
@@ -117,7 +168,12 @@ class OverlaySystem:
         self.clean_up()
         self.main.write_message("Settings: Enemy Deactivated.")
 
-    def set_faction_region(self):
+    def set_faction_region(self) -> None:
+        """Save the selected region as the faction detection area.
+
+        Applies a 30-pixel Y-offset correction and saves coordinates
+        to settings. Marks configuration as changed.
+        """
         settings = self.main.menu.setting.load_settings()
         settings["faction_region_1"]["x"] = self.start_x
         settings["faction_region_1"]["y"] = (
