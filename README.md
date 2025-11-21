@@ -1,9 +1,13 @@
 # Eve Online Alert
 
+![Release](https://img.shields.io/github/v/release/Geuthur/EVE-Alert)
+![Licence](https://img.shields.io/github/license/geuthur/EVE-Alert)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Geuthur/EVE-Alert-Opensource/main.svg)](https://results.pre-commit.ci/latest/github/Geuthur/EVE-Alert-Opensource/main)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Python package](https://github.com/Geuthur/EVE-Alert-Opensource/actions/workflows/python-package.yml/badge.svg)](https://github.com/Geuthur/EVE-Alert-Opensource/actions/workflows/python-package.yml)
 [![GitHub Downloads](https://img.shields.io/github/downloads/Geuthur/EVE-Alert-Opensource/total)](https://tooomm.github.io/github-release-stats/?username=Geuthur&repository=EVE-Alert-Opensource)
+[![codecov](https://codecov.io/gh/Geuthur/EVE-Alert/graph/badge.svg?token=7PQ6WLXDOP)](https://codecov.io/gh/Geuthur/EVE-Alert)
+[![Discord](https://img.shields.io/discord/337275567487320064?label=discord)](https://discord.gg/WrHzA4rnxA)
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W7W810Q5J4)
 

@@ -1,3 +1,52 @@
+# Changelog
+
+## [In Development] - Unreleased
+
+<!--
+Section Order:
+
+### Added
+### Fixed
+### Changed
+### Removed
+-->
+
+Big Thanks to [@Gotarr](https://github.com/Gotarr) for improving the whole EVE-Alert System with many QoL changes, fixes, optimations
+
+### Added
+
+- Codecov Report
+- Discord Badge
+- Release Badge
+- Licence Badge
+- Complete test infrastructure (pytest, pytest-asyncio, pytest-cov, pre-commit)
+- 57 new unit and integration tests (test coverage: 65%)
+- Real-time statistics and history system (alarm counter, session tracking, export to CSV/JSON)
+- Configuration validation for all settings (regions, scales, timers, webhooks, audio)
+- Central management of all constants (constants.py)
+- Developer documentation and AI agent instructions (copilot-instructions.md)
+- Sprint summaries and improvement plan in the docs folder
+
+### Changed
+
+- Updated Codecov action from `v4` to `v5`
+- Refactoring: Exception hierarchy, import organization, code formatting (Black, isort)
+- Type hints and docstrings for all modules
+- Logging system with rotating file handler and module loggers
+- Settings can now be changed at runtime (without restarting)
+- Audio system: mono/stereo conversion, error handling, test buttons in the UI
+- CI/CD: automated tests and coverage checks via GitHub Actions
+
+### Fixed
+
+- Various bugs in settings, vision, overlay, and audio
+- Improved error and validation messages
+
+### Removed
+
+- Unnecessary and duplicate code sections
+- Obsolete socket functions
+
 ## [1.0.1] 2025-06-12
 
 ### Fixed

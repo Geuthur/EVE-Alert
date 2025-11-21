@@ -7,9 +7,26 @@ if TYPE_CHECKING:
 
 
 class ConfigModeMenu:
-    """Description Menu for the configuration mode."""
+    """Configuration mode menu for region selection.
 
-    def __init__(self, main: "MainMenu"):
+    Provides a guide window with instructions for selecting alert and faction
+    regions using keyboard hotkeys (F1/F2). Manages the visual state of the
+    config mode button to indicate when the system is in configuration mode.
+
+    Attributes:
+        main: Reference to MainMenu instance
+        open: Whether the config window is currently open
+        changed: Whether configuration has been modified
+        alert_region: Whether alert region selection is active
+        faction_region: Whether faction region selection is active
+    """
+
+    def __init__(self, main: "MainMenu") -> None:
+        """Initialize the configuration mode menu.
+
+        Args:
+            main: Reference to the MainMenu instance
+        """
         self.main = main
         self.open = False
         self.changed = False
@@ -44,27 +61,27 @@ class ConfigModeMenu:
         self.description_window.protocol("WM_DELETE_WINDOW", self.clean_up)
 
     @property
-    def is_open(self):
+    def is_open(self) -> bool:
         """Returns True if the description window is open."""
         return self.open
 
     @property
-    def is_alert_region(self):
+    def is_alert_region(self) -> bool:
         """Returns True if the alert region is active."""
         return self.alert_region
 
     @property
-    def is_faction_region(self):
+    def is_faction_region(self) -> bool:
         """Returns True if the faction region is active."""
         return self.faction_region
 
     @property
-    def is_changed(self):
+    def is_changed(self) -> bool:
         """Returns True if the configuration mode has been changed."""
         return self.changed
 
-    def clean_up(self):
-        """Closes the description window if it is open."""
+    def clean_up(self) -> None:
+        """Close the configuration window and reset button color."""
         if self.is_open:
             self.open = False
             self.main.mainmenu_buttons.config_mode_menu.configure(
@@ -73,8 +90,12 @@ class ConfigModeMenu:
             # hide the description window
             self.description_window.withdraw()
 
-    def open_menu(self):
-        """Opens the description window for the configuration mode."""
+    def open_menu(self) -> None:
+        """Open or close the configuration mode guide window.
+
+        Shows instructions for F1/F2 region selection. Positions the window
+        to the right of the main menu. Updates button color to indicate active state.
+        """
         if not self.is_open:
             self.open = True
             self.main.mainmenu_buttons.config_mode_menu.configure(
