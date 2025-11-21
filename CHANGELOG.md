@@ -1,3 +1,27 @@
+# Changelog
+
+## [In Development] - Unreleased
+
+<!--
+Section Order:
+
+### Added
+### Fixed
+### Changed
+### Removed
+-->
+
+### Added
+
+- Codecov Report
+- Discord Badge
+- Release Badge
+- Licence Badge
+
+### Changed
+
+- Updated Codecov action from `v4` to `v5`
+
 ## [1.0.1] 2025-06-12
 
 ### Fixed
