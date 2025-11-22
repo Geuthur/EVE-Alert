@@ -11,6 +11,8 @@ Section Order:
 ### Removed
 -->
 
+## [2.0.0] 2025-11-22
+
 Big Thanks to [@Gotarr](https://github.com/Gotarr) for improving the whole EVE-Alert System with many QoL changes, fixes, optimations
 
 ### Added
