@@ -36,15 +36,16 @@ if TYPE_CHECKING:
 # Sound file paths
 ALARM_SOUND = get_resource_path(f"{SOUND_FOLDER}/{ALARM_SOUND_FILE}")
 FACTION_SOUND = get_resource_path(f"{SOUND_FOLDER}/{FACTION_SOUND_FILE}")
+IMG_FOLDER_PATH = get_resource_path(IMG_FOLDER)
 
 ALERT_FILES = [
-    os.path.join(IMG_FOLDER, filename)
-    for filename in os.listdir(IMG_FOLDER)
+    os.path.join(IMG_FOLDER_PATH, filename)
+    for filename in os.listdir(IMG_FOLDER_PATH)
     if filename.startswith(ALERT_IMAGE_PREFIX)
 ]
 FACTION_FILES = [
-    os.path.join(IMG_FOLDER, filename)
-    for filename in os.listdir(IMG_FOLDER)
+    os.path.join(IMG_FOLDER_PATH, filename)
+    for filename in os.listdir(IMG_FOLDER_PATH)
     if filename.startswith(FACTION_IMAGE_PREFIX)
 ]
 
