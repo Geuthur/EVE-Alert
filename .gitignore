@@ -23,6 +23,7 @@ dist/
 *.egg
 main.spec
 Paper.exe
+EVE-Alert.spec
 
 # PyInstaller
 pyinstaller.txt
