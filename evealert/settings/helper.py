@@ -19,48 +19,44 @@ EXEC_ROOT = Path(sys.argv[0]).resolve().parent
 def get_resource_path(relative_path: str) -> str:
     """Get the absolute path to a resource file.
 
-    Resolves relative paths within the evealert directory structure.
-    Useful for accessing images, sounds, and configuration files.
+    Always reads from the executable's directory structure.
+    For bundled exe: reads from folder next to the exe.
+    For development: reads from package directory.
 
     Args:
-        relative_path: Path relative to the evealert directory
+        relative_path: Path like "sound/alarm.wav" or "img/icon.png"
 
     Returns:
         Absolute path to the resource file
 
     Example:
-        >>> get_resource_path("img/online.png")
-        'C:/path/to/evealert/img/online.png'
+        >>> get_resource_path("sound/alarm.wav")
+        'C:/path/to/exe/sound/alarm.wav'
     """
     if not relative_path:
         raise ValueError("relative_path must be provided")
 
     relative = Path(relative_path)
 
-    # Allow callers to pass paths prefixed with the package name (e.g. "evealert/img")
-    if relative.parts and relative.parts[0].lower() == "evealert":
-        relative = Path(*relative.parts[1:])
-
     if relative.is_absolute():
         return str(relative)
 
-    search_roots = [PACKAGE_ROOT, EXEC_ROOT]
-
-    # When bundled with PyInstaller, resources might reside in the temporary
-    # extraction directory referenced by sys._MEIPASS. Add it (and the nested
-    # evealert folder) as fallbacks when files are copied outside the package.
-    bundle_root = getattr(sys, "_MEIPASS", None)
-    if bundle_root:
-        bundle_root_path = Path(bundle_root)
-        search_roots.append(bundle_root_path)
-        search_roots.append(bundle_root_path / "evealert")
-
-    for root in search_roots:
-        candidate = (root / relative).resolve()
-        if candidate.exists():
-            return str(candidate)
-
-    # Final fallback: return the path under the executable directory so files
-    # like settings.json can be created next to the app when they don't exist
-    # yet (e.g., on first run of the bundled exe).
-    return str((EXEC_ROOT / relative).resolve())
+    # If running as bundled exe, use exe directory
+    if getattr(sys, 'frozen', False):
+        # We are running as compiled exe
+        exe_dir = Path(sys.executable).parent
+        resource_path = (exe_dir / relative).resolve()
+        return str(resource_path)
+    
+    # Development mode: strip 'evealert/' prefix and use PACKAGE_ROOT
+    relative_stripped = relative
+    if relative.parts and relative.parts[0].lower() == "evealert":
+        relative_stripped = Path(*relative.parts[1:])
+    
+    resource_path = (PACKAGE_ROOT / relative_stripped).resolve()
+    
+    # Fallback to EXEC_ROOT if not found in PACKAGE_ROOT
+    if not resource_path.exists():
+        resource_path = (EXEC_ROOT / relative_stripped).resolve()
+    
+    return str(resource_path)

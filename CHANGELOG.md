@@ -11,6 +11,13 @@ Section Order:
 ### Removed
 -->
 
+## [2.0.1] 2025-11-24
+
+### Fixed
+
+- **Resource loading:** Completely rewritten `get_resource_path()` — the application now always reads resources from the running executable. This ensures `img/` and `sound/` are consistently loaded in both development and distribution builds.
+- **Sound handling:** Corrected `SOUND_FOLDER` in `evealert/constants.py` to `sound`, so custom WAV files like `alarm.wav` are properly located and played.
+
 ## [2.0.0] 2025-11-22
 
 Big Thanks to [@Gotarr](https://github.com/Gotarr) for improving the whole EVE-Alert System with many QoL changes, fixes, optimations
