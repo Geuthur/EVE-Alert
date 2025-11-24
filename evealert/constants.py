@@ -24,7 +24,7 @@ STATUS_CHECK_INTERVAL = 1000  # Status check interval (ms)
 AUDIO_CHANNELS = 2  # Stereo output
 
 # File Paths
-IMG_FOLDER = "evealert/img"
+IMG_FOLDER = "img"
 SOUND_FOLDER = "sound"
 ALARM_SOUND_FILE = "alarm.wav"
 FACTION_SOUND_FILE = "faction.wav"
