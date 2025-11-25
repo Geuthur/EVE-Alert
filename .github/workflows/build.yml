@@ -27,7 +27,7 @@ jobs:
 
     - name: Build with PyInstaller
       run: |
-        python -m PyInstaller --noconfirm --onefile --windowed --icon "evealert/img/logo.ico" --name "EVE-Alert" --add-data "evealert/img;evealert/img/" --add-data "evealert/sound;evealert/sound/" --add-data "evealert/docs;evealert/docs/" --hidden-import "customtkinter" main.py
+        python -m PyInstaller --noconfirm --onefile --windowed --icon "evealert/img/eve.ico" --name "EVE-Alert" --add-data "evealert/img;evealert/img/" --add-data "evealert/sound;evealert/sound/" --add-data "evealert/docs;evealert/docs/" --hidden-import "customtkinter" main.py
 
     - name: Create Release Archive
       run: |
