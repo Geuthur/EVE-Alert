@@ -11,6 +11,14 @@ Section Order:
 ### Removed
 -->
 
+## [2.0.2] 2026-01-03
+
+## Added
+- Makefile System
+
+### Changed
+- removed negative error handler in some cases it needs to be negative see [#51](https://github.com/Geuthur/EVE-Alert/issues/51)
+
 ## [2.0.1] 2025-11-24
 
 ### Fixed
@@ -220,4 +228,9 @@ Big Thanks to [@Gotarr](https://github.com/Gotarr) for improving the whole EVE-A
 
 ## Full Changelog
 
-https://github.com/geuthur/aa-ledger/compare/v0.4.0...v0.4.1
+[1.0.1]: https://github.com/Geuthur/eve-alert/compare/v1.0.0...v1.0.1 "1.0.1"
+[2.0.0]: https://github.com/Geuthur/eve-alert/compare/v1.0.1...v2.0.0 "2.0.0"
+[2.0.1]: https://github.com/Geuthur/eve-alert/compare/v2.0.0...v2.0.1 "2.0.1"
+[2.0.2]: https://github.com/Geuthur/eve-alert/compare/v2.0.1...v2.0.2 "2.0.2"
+[in development]: https://github.com/Geuthur/eve-alert/compare/v2.0.2...HEAD "In Development"
+[report any issues]: https://github.com/Geuthur/eve-alert/issues "report any issues"
