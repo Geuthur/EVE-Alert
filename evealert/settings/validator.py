@@ -38,9 +38,10 @@ class ConfigValidator:
         if y1 >= y2:
             return False, f"{region_name}: y1 ({y1}) must be less than y2 ({y2})"
 
+        # TODO Has been disabled for now: re-enable if needed
         # Only check horizontal coordinates for negativity; vertical can be negative for multi-monitor setups
-        if any(coord < 0 for coord in [x1, x2]):
-            return False, f"{region_name}: Coordinates cannot be negative"
+        #if any(coord < 0 for coord in [x1, x2]):
+        #    return False, f"{region_name}: Coordinates cannot be negative"
 
         # Check minimum size (at least 10x10 pixels)
         width = x2 - x1
