@@ -155,7 +155,7 @@ repos:
         exclude: '^main\.py$'
 
   - repo: https://github.com/PyCQA/isort
-    rev: 7.0.0
+    rev: 8.0.1
     hooks:
       - id: isort
         name: Isort
@@ -201,7 +201,7 @@ repos:
           - mdformat-shfmt==0.2.0  # Mdformat plugin to format shell code blocks » https://github.com/hukkin/mdformat-shfmt/tags
 
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: v2.12.1
+    rev: v2.16.2
     hooks:
       - id: pyproject-fmt
         name: pyproject.toml formatter
@@ -217,7 +217,7 @@ repos:
         description: Validate the pyproject.toml file.
 
   - repo: https://github.com/pylint-dev/pylint
-    rev: v4.0.4
+    rev: v4.0.5
     hooks:
       - id: pylint
         name: Pylint
@@ -226,7 +226,7 @@ repos:
           - --py-version=3.10
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.36.1
+    rev: 0.37.0
     hooks:
       - id: check-github-actions
         name: Check GitHub Actions
