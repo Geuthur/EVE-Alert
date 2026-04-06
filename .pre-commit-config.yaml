@@ -124,7 +124,7 @@ repos:
         description: Enforce that python3.6+ type annotations are used instead of type comments.
 
   - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
-    rev: 3.6.0
+    rev: 3.6.1
     hooks:
       - id: editorconfig-checker
         name: EditorConfig Checker
@@ -169,7 +169,7 @@ repos:
         description: Check for black disable comments.
 
   - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 26.1.0
+    rev: 26.3.1
     hooks:
       - id: black
         name: Black
@@ -201,7 +201,7 @@ repos:
           - mdformat-shfmt==0.2.0  # Mdformat plugin to format shell code blocks » https://github.com/hukkin/mdformat-shfmt/tags
 
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: v2.16.2
+    rev: v2.21.0
     hooks:
       - id: pyproject-fmt
         name: pyproject.toml formatter
@@ -226,7 +226,7 @@ repos:
           - --py-version=3.10
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.37.0
+    rev: 0.37.1
     hooks:
       - id: check-github-actions
         name: Check GitHub Actions
