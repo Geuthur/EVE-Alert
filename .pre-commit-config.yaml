@@ -201,7 +201,7 @@ repos:
           - mdformat-shfmt==0.2.0  # Mdformat plugin to format shell code blocks » https://github.com/hukkin/mdformat-shfmt/tags
 
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: v2.23.0
+    rev: v2.25.1
     hooks:
       - id: pyproject-fmt
         name: pyproject.toml formatter
@@ -217,7 +217,7 @@ repos:
         description: Validate the pyproject.toml file.
 
   - repo: https://github.com/pylint-dev/pylint
-    rev: v4.0.5
+    rev: v4.0.6
     hooks:
       - id: pylint
         name: Pylint
@@ -226,7 +226,7 @@ repos:
           - --py-version=3.10
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.37.2
+    rev: 0.37.4
     hooks:
       - id: check-github-actions
         name: Check GitHub Actions
