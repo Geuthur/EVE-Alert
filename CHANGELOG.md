@@ -11,6 +11,10 @@ Section Order:
 ### Removed
 -->
 
+### Changed
+
+- Minimum required Python version is now 3.11 (`pillow==13.0.0` no longer installs on 3.10); Python 3.10 removed from CI and build
+
 ## [2.0.2] 2026-01-03
 
 ## Added
